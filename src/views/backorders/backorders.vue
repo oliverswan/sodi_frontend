@@ -1,0 +1,130 @@
+<template>
+  <div>
+       <Row>
+       <Col span="24">
+         <vue-bootstrap-table
+           :columns="columns"
+           :values="data"
+           :show-filter="true"
+           :sortable="true"
+           :paginated="true"
+           :ajax="aj"
+           :rowClickHandler="rowClicked"
+           :filter-case-sensitive="false"
+           :default-order-column="columnToSortBy"
+           :default-order-direction="true"
+           @cellDataModifiedEvent="onCellDataModifiedEvent"
+           @ajaxLoadedEvent="onAjaxLoadedEvent"
+           @ajaxLoadingErro="onAjaxLoadingError"
+           >
+         </vue-bootstrap-table>
+         <v-dialog/>
+         <modal name="detail">
+          {{this.current.invoiceNumber}}
+         </modal>
+       </Col>
+       </Row>
+  </div>
+</template>
+<script>
+import API from '../../api/config'
+import VueBootstrapTable from '../components/VueBootstrapTable.vue';
+
+    export default {
+        components: {
+            VueBootstrapTable
+        },
+        data () {
+            return {
+                    columnToSortBy: "invoiceNumber",
+                    data:[],
+                    current:{},
+                    aj: {
+                       enabled: true,
+                       url: API.host+"/api/backorders?echo=2",
+                       method: "GET",
+                       delegate: false
+                     },
+                    columns:[{
+                              title: 'id',
+                              visible: true,
+                          },  {
+                              title: 'invoiceNumber',
+                              visible: true,
+                              editable: true,
+                          } ],
+                    dialog:{
+                          show:false,
+                          title:{
+                                    			text:'Back Order Detail',
+                                  			  className:'xa-bg-blue'	//标题样式类名，包含`background`、`color`即可
+                          	},
+                        buttons:[
+                                  			/**
+                                  				`@text`：按钮文字
+                                  				`@className`：按钮样式类名，包含`background`、`color`即可（内置一部分）
+                                  				`@clickEvent`：按钮点击事件后监听的事件名
+                                  			*/
+                                  			{text:'Cancel',className:'xa-bg-red-click',clickEvent:'cancel'},
+                                  			{text:'Complete',className:'xa-bg-blue-click',clickEvent:'confirm'}
+                         	]
+        	            }
+          }
+        },
+        methods: {
+          getData(){
+          this.loading = true;
+           this.$http.get(API.host+"/api/backorders").then(function(res){
+                         if(res.data){
+                           this.backorders = res.data;
+                         }
+                     },function(res){
+                    });
+          },
+          complete(id)
+          {
+            this.$http.get(API.host+"/api/backorders/complete/"+id).then(function(res){
+                          this.getData ();
+                      },function(res){
+                     });
+          },
+          rowClicked($event, entry){
+              this.current = entry;
+              // this.$modal.show('detail');
+              this.$modal.show('dialog', {
+                  title: 'Alert!',
+                  text: 'You are too awesome',
+                  buttons: [
+                    {
+                      title: 'Deal with it',
+                      handler: () => { alert('Woot!') }
+                    },
+                    {
+                      title: 'Close'
+                    }
+                 ]
+               });
+          },
+          onCellDataModifiedEvent(originalValue, newValue, columnTitle, entry){
+            // console.log(API.host);
+            // this.$http.post(API.host+"/api/items/save",entry, {  headers: {  'Content-Type': 'application/json'  }  }
+            //     ).then(function(res){
+            //                 // this.data = {};
+            //                  console.log("success！");
+            //                   // console.log(res.data.body.message);
+            //       },function(res){
+            //                      // this.data = {};
+            //                            console.log(res.body.message);
+            //       });
+
+              console.log(entry);
+          },
+          onAjaxLoadedEvent( data ) {
+              console.log("ajaxLoadedEvent - data : " + data );
+          },
+          onAjaxLoadingError( data ) {
+              console.log("ajaxLoadedEvent - data : " + data );
+          }
+      }// end of methods
+    }
+</script>
