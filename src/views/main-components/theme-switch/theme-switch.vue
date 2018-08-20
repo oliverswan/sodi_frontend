@@ -113,6 +113,7 @@ export default {
                 }]);
             }
             let stylePath = '';
+            // 生产环境下使用dist
             if (config.env.indexOf('dev') > -1) {
                 stylePath = './src/views/main-components/theme-switch/theme/';
             } else {

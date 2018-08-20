@@ -12,18 +12,19 @@ const app = {
         menuTheme: 'dark', // 主题
         themeColor: '',
         pageOpenedList: [{
-            title: '首页',
+            title: 'Home',
             path: '',
             name: 'home_index'
         }],
         currentPageName: '',
         currentPath: [
             {
-                title: '首页',
+                title: 'Home',
                 path: '',
                 name: 'home_index'
             }
         ], // 面包屑数组
+        // 菜单列表
         menuList: [],
         routers: [
             otherRouter,
@@ -40,6 +41,7 @@ const app = {
         updateMenulist (state) {
             let accessCode = parseInt(Cookies.get('access'));
             let menuList = [];
+            // 这里只处理appRouter里的路径，不处理otherRouter里的路径
             appRouter.forEach((item, index) => {
                 if (item.access !== undefined) {
                     if (Util.showThisRoute(item.access, accessCode)) {

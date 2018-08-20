@@ -4,13 +4,23 @@ import {router} from './router/index';
 import {appRouter} from './router/router';
 import store from './store';
 import App from './app.vue';
-import '@/locale';
+// import '@/locale';
 import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import util from './libs/util';
+import VueResource from 'vue-resource';
+import uploader from 'vue-simple-uploader'
 
-Vue.use(VueI18n);
-Vue.use(iView);
+import { Page } from 'iview';
+import locale from 'iview/dist/locale/en-US';
+import VModal from 'vue-js-modal'
+
+
+Vue.use(iView, { locale });
+// Vue.use(iView);
+Vue.use(VueResource);//启用插件
+Vue.use(uploader);
+Vue.use(VModal, { dialog: true , dynamic: true, injectModalsContainer: true });
 
 new Vue({
     el: '#app',
@@ -28,7 +38,7 @@ new Vue({
         // 权限菜单过滤相关
         this.$store.commit('updateMenulist');
         // iview-admin检查更新
-        util.checkUpdate(this);
+      //  util.checkUpdate(this);
     },
     created () {
         let tagsList = [];

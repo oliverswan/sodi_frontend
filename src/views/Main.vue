@@ -3,20 +3,23 @@
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
+        <!-- 左侧 -->
         <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
-            <shrinkable-menu 
+            <!-- 左侧菜单组件 :表示读取属性 @表示事件？-->
+            <shrinkable-menu
                 :shrink="shrink"
                 @on-change="handleSubmenuChange"
-                :theme="menuTheme" 
+                :theme="menuTheme"
                 :before-push="beforePush"
                 :open-names="openedSubmenuArr"
                 :menu-list="menuList">
                 <div slot="top" class="logo-con">
-                    <img v-show="!shrink"  src="../images/logo.jpg" key="max-logo" />
-                    <img v-show="shrink" src="../images/logo-min.jpg" key="min-logo" />
+                    <img v-show="!shrink"  src="../images/sodi_logo.svg" key="max-logo" />
+                    <img v-show="shrink" src="../images/sodi_logo.svg" key="min-logo" />
                 </div>
             </shrinkable-menu>
         </div>
+        <!-- 中部上 -->
         <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
             <div class="main-header">
                 <div class="navicon-con">
@@ -30,11 +33,11 @@
                     </div>
                 </div>
                 <div class="header-avator-con">
-                    <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
-                    <lock-screen></lock-screen>
-                    <message-tip v-model="mesCount"></message-tip>
-                    <theme-switch></theme-switch>
-                    
+                    <!-- <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen> -->
+                    <!-- <lock-screen></lock-screen> -->
+                    <!-- <message-tip v-model="mesCount"></message-tip> -->
+                    <!-- <theme-switch></theme-switch> -->
+
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -43,8 +46,8 @@
                                     <Icon type="arrow-down-b"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem name="ownSpace">个人中心</DropdownItem>
-                                    <DropdownItem name="loginout" divided>退出登录</DropdownItem>
+                                    <!-- <DropdownItem name="ownSpace">My Account</DropdownItem> -->
+                                    <DropdownItem name="loginout" divided>Logout</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                             <Avatar :src="avatorPath" style="background: #619fe7;margin-left: 10px;"></Avatar>
@@ -56,6 +59,7 @@
                 <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
             </div>
         </div>
+        <!-- 中部下主页面 -->
         <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
             <div class="single-page">
                 <keep-alive :include="cachePage">
@@ -75,7 +79,7 @@
     import themeSwitch from './main-components/theme-switch/theme-switch.vue';
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
-    
+
     export default {
         components: {
             shrinkableMenu,

@@ -4,7 +4,7 @@
 
 <template>
     <div>
-        <Table :ref="refs" :columns="columnsList" :data="thisTableData" border disabled-hover></Table>
+        <Table stripe :ref="refs" :columns="columnsList" :data="thisTableData" border disabled-hover></Table>
     </div>
 </template>
 
@@ -41,7 +41,7 @@ const editButton = (vm, h, currentRow, index) => {
                 }
             }
         }
-    }, currentRow.editting ? '保存' : '编辑');
+    }, currentRow.editting ? 'save' : 'edit');
 };
 const deleteButton = (vm, h, currentRow, index) => {
     return h('Poptip', {
@@ -66,7 +66,7 @@ const deleteButton = (vm, h, currentRow, index) => {
                 type: 'error',
                 placement: 'top'
             }
-        }, '删除')
+        }, 'delete')
     ]);
 };
 const incellEditBtn = (vm, h, param) => {
@@ -147,7 +147,7 @@ export default {
         },
         hoverShow: {
             type: Boolean,
-            default: false
+            default: true
         }
     },
     data () {
@@ -161,8 +161,10 @@ export default {
         this.init();
     },
     methods: {
+        // 初始化
         init () {
             let vm = this;
+            // 找出可以编辑的字段
             let editableCell = this.columnsList.filter(item => {
                 if (item.editable) {
                     if (item.editable === true) {
@@ -199,19 +201,18 @@ export default {
             });
             this.thisTableData = res;
             this.edittingStore = JSON.parse(JSON.stringify(this.thisTableData));
+            // 遍历每个列
             this.columnsList.forEach(item => {
                 if (item.editable) {
+                    // 定义展现函数
                     item.render = (h, param) => {
+                        // 当前行数据
                         let currentRow = this.thisTableData[param.index];
+                        // 如果当前数据不在正编辑状态
                         if (!currentRow.editting) {
                             if (this.editIncell) {
-                                return h('Row', {
-                                    props: {
-                                        type: 'flex',
-                                        align: 'middle',
-                                        justify: 'center'
-                                    }
-                                }, [
+                                 // h函数的3个参数 1.标签名 2.标签相关属性 3.标签内部的html内容
+                                return h('Row', {props: {  type: 'flex',  align: 'middle',  justify: 'center'  }}, [
                                     h('Col', {
                                         props: {
                                             span: '22'
@@ -230,17 +231,15 @@ export default {
                             } else {
                                 return h('span', currentRow[item.key]);
                             }
-                        } else {
-                            return h('Input', {
-                                props: {
-                                    type: 'text',
-                                    value: currentRow[item.key]
-                                },
-                                on: {
-                                    'on-change' (event) {
-                                        let key = param.column.key;
-                                        vm.edittingStore[param.index][key] = event.target.value;
-                                    }
+                        }
+                        // 如果可以编辑
+                        else {
+                            return h('Input',
+                                {
+                                  props: {  type: 'text',  value: currentRow[item.key]  },
+                                  on: {'on-change' (event) {  let key = param.column.key;
+                                          vm.edittingStore[param.index][key] = event.target.value;
+                                      }
                                 }
                             });
                         }

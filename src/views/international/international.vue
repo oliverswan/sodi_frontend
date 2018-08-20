@@ -72,7 +72,7 @@ export default {
     name: 'international_index',
     data () {
         return {
-            lang: 'zh-CN',
+            lang: 'en-US',
             valueText: 3,
             showModal: false,
             columnsI18n: [
@@ -104,7 +104,7 @@ export default {
     methods: {
         handleSwitch (lang) {
             this.lang = lang;
-            localStorage.lang = lang;
+            localStorage.lang = lang;// en-US
             this.$store.commit('switchLang', lang); // 如果你要自己实现多语言切换，那么只需要执行这行代码即可，修改语言类型
 
             this.columnsI18n = [
