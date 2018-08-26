@@ -53,6 +53,13 @@ module.exports = {
                     use: ['css-loader?minimize', 'autoprefixer-loader'],
                     fallback: 'style-loader'
                 })
+            },{
+                test: /\.styl/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'stylus-loader'
+                ]
             },
             {
                 test: /\.less$/,

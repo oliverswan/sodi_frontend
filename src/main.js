@@ -15,12 +15,18 @@ import { Page } from 'iview';
 import locale from 'iview/dist/locale/en-US';
 import VModal from 'vue-js-modal'
 
+import Autocomplete from 'v-autocomplete'
+import 'v-autocomplete/dist/v-autocomplete.css'
+Vue.use(Autocomplete)
+
 
 Vue.use(iView, { locale });
 // Vue.use(iView);
 Vue.use(VueResource);//启用插件
 Vue.use(uploader);
 Vue.use(VModal, { dialog: true , dynamic: true, injectModalsContainer: true });
+
+
 
 new Vue({
     el: '#app',

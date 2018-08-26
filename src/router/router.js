@@ -130,6 +130,18 @@ export const appRouter = [
         ]
     },
     {
+        path: '/invoices',
+        icon: 'ionic',
+        title: 'Invoices',
+        name: 'invoices',
+        // 仍然使用Main组件，将内容展现到Main的子routerview里面去
+        component: Main,
+        children: [
+            // 注意name的属性值一定要加_index的规则
+            { path: 'index', title: 'Invoices', name: 'invoices_index', component: () => import('@/views/invoices/invoices.vue') }
+        ]
+    },
+    {
         path: '/inventory',
         icon: 'ionic',
         title: 'Inventory',
@@ -139,6 +151,18 @@ export const appRouter = [
         children: [
             // 注意name的属性值一定要加_index的规则
             { path: 'index', title: 'Inventory', name: 'inventory_index', component: () => import('@/views/inventory/items.vue') }
+        ]
+    },
+    {
+        path: '/contacts',
+        icon: 'ionic',
+        title: 'Contacts',
+        name: 'contacts',
+        // 仍然使用Main组件，将内容展现到Main的子routerview里面去
+        component: Main,
+        children: [
+            // 注意name的属性值一定要加_index的规则
+            { path: 'index', title: 'Contacts', name: 'contacts_index', component: () => import('@/views/contacts/contacts.vue') }
         ]
     },
     {
@@ -163,7 +187,19 @@ export const appRouter = [
             // 注意name的属性值一定要加_index的规则
             { path: 'index', title: 'Report', name: 'report_index', component: () => import('@/views/report/report.vue') }
         ]
-    }
+    },
+        {
+            path: '/test',
+            icon: 'ionic',
+            title: 'Test',
+            name: 'test',
+            // 仍然使用Main组件，将内容展现到Main的子routerview里面去
+            component: Main,
+            children: [
+                // 注意name的属性值一定要加_index的规则
+                { path: 'index', title: 'Test', name: 'test_index', component: () => import('@/views/components/editTable/editTable.vue') }
+            ]
+        }
 
     // ,
     // {

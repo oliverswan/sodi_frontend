@@ -9,27 +9,20 @@
                    @on-change="handleChange"
                    @on-row-click="rowClick"
                    :editIncell="true"
+                   :rowClassfunction="getRowClassName"
                    :columns-list="columns"
                    :loading="loading"
                    :hoverShow=true
                ></can-edit-table>
        </Col>
        </Row>
-      <Row>
-        <i-button type="primary" style="margin:10px"  @click.prevent="approveAll">Approve All Drafts</i-button>
-      </Row>
   </div>
 </template>
+
 <script>
 import canEditTable from '../tables/components/canEditTable.vue';
 import API from '../../api/config';
-
-// <Row>
-//   <Col span="24">
-//      <Input v-model="mapping" type="textarea"  :rows="20" placeholder="Enter mapping..." />
-//  </Col>
-// </Row>
-
+import $ from "jquery";
     export default {
       components: {
           canEditTable
@@ -45,6 +38,16 @@ import API from '../../api/config';
                   width: 80,
                   align: 'center'
               },{
+                  title: 'orderId',
+                  align: 'center',
+                  key: 'orderNumber',
+                  editable: false
+              },{
+                  title: 'Reference',
+                  align: 'center',
+                  key: 'Reference',
+                  editable: false
+              },{
                   title: 'InvoiceNumber',
                   align: 'center',
                   key: 'invoiceNumber',
@@ -55,46 +58,64 @@ import API from '../../api/config';
                   align: 'center',
                   key: 'contactName'
               },
-
+              {
+                  title: 'Total',
+                  align: 'center',
+                  key: 'totalamount'
+              },
               {
                        title: 'Action',
                        key: 'action',
-                       width: 150,
+                       width: 300,
                        align: 'center',
                        render: (h, params) => {
-                           return h('div', [
-                               h('Button', {
-                                   props: {
-                                       type: 'primary',
-                                       size: 'small'
-                                   },
-                                   style: {
-                                       marginRight: '5px'
-                                   },
-                                   on: {
+                         return  h('div',[ h('div',{style:{float:'left',margin:'auto',cursor:'pointer'},on: {
                                        click: () => {
-                                         this.view(params.index);
+                                         this.$http.get(API.host+"/api/mail/"+params.row.id).then(function(res){
+                                                       console.log("success!!");
+                                                       $("tr:contains('"+params.row.invoiceNumber+"')").addClass('green-row');
+                                                   },function(res){
+                                                        //alert(res.status)
+                                                  });
                                        }
-                                   }
-                               }, 'View'),
-                               h('Button', {
-                                   props: {
-                                       type: 'error',
-                                       size: 'small'
-                                   },
-                                   on: {
-                                       click: () => {
-                                           alert(params.index);
-                                       }
-                                   }
-                               }, 'Delete')
-                           ]);
-                       }
-                   }
+                                   }},[h('Icon',{ props:{type: 'ios-email-outline'},style:{ fontSize: '38px',
+                                     color: '#191970',
+                                     width: '20px',
+                                     margin:'10px',
+                                     height:'20px'}},'内容2')],
 
-            ]
-            }
-        },
+                         '内容1'),h('div',{style:{float:'left',cursor:'pointer'},on: {
+                                       click: () => {
+                                           let url = API.host+"/api/reports/invoice/"+params.row.id;
+                                           window.open(url);
+                                       }
+                                   }},[h('Icon',{ props:{type: 'document'},style:{ fontSize: '38px',
+                                     color: '#FF4500',
+                                     width: '20px',
+                                     margin:'10px',
+                                     height:'30px'}},'内容2')],
+
+                         '内容1'),h('div',{style:{float:'left',cursor:'pointer'},on: {
+                                       click: () => {
+                                        this.view(params.index);
+                                       }
+                                   }},[h('Icon',{ props:{type: 'document'},style:{ fontSize: '38px',
+                                     color: '#191970',
+                                     width: '20px',
+                                     margin:'10px',
+                                     height:'30px'}},'内容2')],
+
+                         '内容1')],'');
+
+
+
+
+                       }// end of render
+              }//end of ele
+              ]// end of columns
+            }//endof return data
+        },// end of data
+
         mounted () {
             this.getData();
         },
@@ -103,7 +124,7 @@ import API from '../../api/config';
             // this.data =[{"name":"field","values":"\"aaaa\",\"bbbb\",\"cccc\",\"dddddddd\""}];
             this.loading = true;
            //  let _this = this;
-           this.$http.get(API.host+"/api/invoices/draft").then(function(res){
+           this.$http.get(API.host+"/api/invoices").then(function(res){
                         this.loading = false;
                          if(res.data){
                            this.data = res.data;
@@ -113,6 +134,14 @@ import API from '../../api/config';
                           //alert(res.status)
                     });
           },
+          getRowClassName (row, index) {
+
+                      if(row.status == 3)
+                      {
+                            return 'green-row';
+                      }
+                      return '';
+            },
             view(index) {
                 let invoice = this.data[index];
                 this.$router.push({
@@ -131,7 +160,6 @@ import API from '../../api/config';
             },
             rowClick () {
                 alert("dd");
-
             },
             handleChange (val, index) {
                 this.$Message.success('修改了第' + (index + 1) + '行数据');
@@ -152,3 +180,5 @@ import API from '../../api/config';
       }// end of methods
     }
 </script>
+<style>
+</style>

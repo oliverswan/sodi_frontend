@@ -11,7 +11,6 @@
            :ajax="aj"
            :rowClickHandler="rowClicked"
            :filter-case-sensitive="false"
-           :default-order-column="columnToSortBy"
            :default-order-direction="true"
            @cellDataModifiedEvent="onCellDataModifiedEvent"
            @ajaxLoadedEvent="onAjaxLoadedEvent"
@@ -29,7 +28,7 @@
 <script>
 import API from '../../api/config'
 import VueBootstrapTable from '../components/VueBootstrapTable.vue';
-
+// :default-order-column="invoiceNumber"
     export default {
         components: {
             VueBootstrapTable
@@ -49,10 +48,15 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                               title: 'id',
                               visible: true,
                           },  {
+                              title: 'customName',
+                              visible: true,
+                              editable: true,
+                          },  {
                               title: 'invoiceNumber',
                               visible: true,
                               editable: true,
-                          } ],
+                          } 
+                        ],
                     dialog:{
                           show:false,
                           title:{
@@ -72,15 +76,15 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
           }
         },
         methods: {
-          getData(){
-          this.loading = true;
-           this.$http.get(API.host+"/api/backorders").then(function(res){
-                         if(res.data){
-                           this.backorders = res.data;
-                         }
-                     },function(res){
-                    });
-          },
+          // getData(){
+          // this.loading = true;
+          //  this.$http.get(API.host+"/api/backorders").then(function(res){
+          //                if(res.data){
+          //                  this.backorders = res.data;
+          //                }
+          //            },function(res){
+          //           });
+          // },
           complete(id)
           {
             this.$http.get(API.host+"/api/backorders/complete/"+id).then(function(res){
@@ -89,15 +93,23 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                      });
           },
           rowClicked($event, entry){
-              this.current = entry;
-              // this.$modal.show('detail');
+              // this.current = entry;
+              let that = this;
+              let content = "";
+
+              for(var o in entry.orders)
+　            {
+                content += o +" x "+entry.orders[o];
+              }
               this.$modal.show('dialog', {
-                  title: 'Alert!',
-                  text: 'You are too awesome',
+                  title:  entry.invoiceNumber,
+                  text:content,
                   buttons: [
                     {
-                      title: 'Deal with it',
-                      handler: () => { alert('Woot!') }
+                      title: 'Complete',
+                      handler: () => {
+                          that.complete(entry.id);
+                      }
                     },
                     {
                       title: 'Close'
@@ -106,18 +118,15 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                });
           },
           onCellDataModifiedEvent(originalValue, newValue, columnTitle, entry){
-            // console.log(API.host);
-            // this.$http.post(API.host+"/api/items/save",entry, {  headers: {  'Content-Type': 'application/json'  }  }
-            //     ).then(function(res){
-            //                 // this.data = {};
-            //                  console.log("success！");
-            //                   // console.log(res.data.body.message);
-            //       },function(res){
-            //                      // this.data = {};
-            //                            console.log(res.body.message);
-            //       });
-
-              console.log(entry);
+            this.$http.post(API.host+"/api/backorders/update",entry, {  headers: {  'Content-Type': 'application/json'  }  }
+                ).then(function(res){
+                            // this.data = {};
+                             console.log("success！");
+                              // console.log(res.data.body.message);
+                  },function(res){
+                                 // this.data = {};
+                                       console.log(res.body.message);
+                  });
           },
           onAjaxLoadedEvent( data ) {
               console.log("ajaxLoadedEvent - data : " + data );

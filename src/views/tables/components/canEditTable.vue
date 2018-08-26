@@ -4,7 +4,7 @@
 
 <template>
     <div>
-        <Table stripe :ref="refs" :columns="columnsList" :data="thisTableData" border disabled-hover></Table>
+        <Table  :ref="refs" :columns="columnsList" :row-class-name="rowClassfunction" :data="thisTableData" border disabled-hover></Table>
     </div>
 </template>
 
@@ -141,6 +141,7 @@ export default {
         columnsList: Array,
         value: Array,
         url: String,
+        rowClassfunction:Function,
         editIncell: {
             type: Boolean,
             default: false
@@ -161,6 +162,10 @@ export default {
         this.init();
     },
     methods: {
+      // rowClassfunction (row,index){
+      //       console.log(index);
+      //       return 'info-row';
+      // },
         // 初始化
         init () {
             let vm = this;
@@ -278,3 +283,8 @@ export default {
     }
 };
 </script>
+<style>
+.green-row td{
+   background-color: #8FBC8F;
+}
+</style>

@@ -8,6 +8,10 @@
          <Row>
            <B>Back Order Report: </B>&nbsp;&nbsp;&nbsp;&nbsp;
            <i-button type="primary" style="margin:10px"  @click.prevent="report_backorder">Generate</i-button>
+         </Row>
+         <Row>
+           <B>Delivery Report: </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <i-button type="primary" style="margin:10px"  @click.prevent="report_delivery">Generate</i-button>
           </Row>
   </div>
 </template>
@@ -50,6 +54,9 @@ import API from '../../api/config';
             ,report_backorder() {
               let url = API.host+"/api/reports/backorder";
               window.open(url);
+            }  ,report_delivery() {
+                let url = API.host+"/api/reports/backorderDelivery";
+                window.open(url);
             }
 
       }// end of methods
