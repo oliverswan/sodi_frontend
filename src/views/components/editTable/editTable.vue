@@ -74,7 +74,7 @@ import API from '../../../api/config';
         }
     },
     // mounted (){
-    //   console.log(this.invoice);
+    //   console.log(this.invoice.items[0]);
     // },
     data () {
          return {
@@ -88,14 +88,17 @@ import API from '../../../api/config';
           if(column === 'quantity' ||column === 'unitAmount')
           {
             item.totalamount = item.quantity * item.unitAmount;
+            item.totalamounts = ""+item.quantity * item.unitAmount;
             item.gst = this.keep2digits(item.totalamount*0.1);
+            item.gsts = ""+this.keep2digits(item.totalamount*0.1);
             item.subtotal =this.keep2digits(  item.totalamount +  item.gst );
-
+            item.subtotals = ""+this.keep2digits(  item.totalamount +  item.gst );
             let total =0.00;
             this.invoice.items.forEach(function (item, i) {
                 total = total +item.subtotal;
             });
             this.invoice.subtotal = this.keep2digits(total);
+            this.invoice.subtotals =""+ this.keep2digits(total);
           }
         },
         keep2digits(num)
@@ -113,7 +116,6 @@ import API from '../../../api/config';
           }
       },
       save(){
-        console.log(API.host+"/api/invoices/update");
         this.$http.post(API.host+"/api/invoices/update",this.invoice, {  headers: {  'Content-Type': 'application/json'  }  }
             ).then(function(res){
                         // this.data = {};
@@ -143,9 +145,12 @@ import API from '../../../api/config';
           // columns:["inventoryItemCode","description","quantity","unitAmount","totalamount"]
         item[this.columns[0]] = this.auto_item.code;
         item[this.columns[1]] = this.auto_item.name;
-        item[this.columns[2]] = this.auto_item.price;
-        item[this.columns[3]] = 0;
-        item[this.columns[4]] = 0;
+        item[this.columns[2]] = 0.00;
+        item[this.columns[3]] = this.auto_item.price;
+        item[this.columns[4]] = 0.00;
+        item[this.columns[5]] = "0.00";
+        item[this.columns[6]] =  "0.00";
+        item[this.columns[7]] = this.auto_item.accountCode;
         this.invoice.items.push(item);
       }
     }

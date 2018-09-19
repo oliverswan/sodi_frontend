@@ -36,7 +36,7 @@
                         </Card>
                     </Col>
                     <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
-                        <Card>
+                        <!-- <Card>
                             <p slot="title" class="card-title">
                                 <Icon type="android-checkbox-outline"></Icon>
                                 ToDo List
@@ -62,7 +62,8 @@
                                     <to-do-list-item :content="item.title"></to-do-list-item>
                                 </div>
                             </div>
-                        </Card>
+                        </Card> -->
+                        <sales-chart></sales-chart>
                     </Col>
                 </Row>
             </Col>
@@ -82,6 +83,8 @@ import inforCard from './components/inforCard.vue';
 import mapDataTable from './components/mapDataTable.vue';
 import toDoListItem from './components/toDoListItem.vue';
 
+import salesChart from '../components/salesChart'
+
 export default {
     name: 'home',
     components: {
@@ -93,7 +96,8 @@ export default {
         countUp,
         inforCard,
         mapDataTable,
-        toDoListItem
+        toDoListItem,
+        salesChart
     },
     data () {
         return {

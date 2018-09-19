@@ -5,6 +5,7 @@
 <template>
     <div>
         <Table  :ref="refs" :columns="columnsList" :row-class-name="rowClassfunction" :data="thisTableData" border disabled-hover></Table>
+        <Page   :total="pageTotal" :current="pageNum" :page-size="pageSize" show-elevator show-sizer show-total placement="top" @on-change="handlePage" @on-page-size-change="handlePageSize"></Page>
     </div>
 </template>
 
@@ -149,7 +150,12 @@ export default {
         hoverShow: {
             type: Boolean,
             default: true
-        }
+        },
+        pageTotal:Number,
+        pageNum:Number,
+        pageSize:Number,
+        handlePage:Function,
+        handlePageSize:Function
     },
     data () {
         return {

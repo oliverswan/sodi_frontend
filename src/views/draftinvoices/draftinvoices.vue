@@ -11,6 +11,8 @@
                    :editIncell="true"
                    :columns-list="columns"
                    :loading="loading"
+                   :handlePage="handlePage"
+                   :handlePageSize="handlePageSize"
                    :hoverShow=true
                ></can-edit-table>
        </Col>
@@ -76,18 +78,19 @@ import API from '../../api/config';
                                          this.view(params.index);
                                        }
                                    }
-                               }, 'View'),
-                               h('Button', {
-                                   props: {
-                                       type: 'error',
-                                       size: 'small'
-                                   },
-                                   on: {
-                                       click: () => {
-                                           alert(params.index);
-                                       }
-                                   }
-                               }, 'Delete')
+                               }, 'View')
+                               // ,
+                               // h('Button', {
+                               //     props: {
+                               //         type: 'error',
+                               //         size: 'small'
+                               //     },
+                               //     on: {
+                               //         click: () => {
+                               //             alert(params.index);
+                               //         }
+                               //     }
+                               // }, 'Delete')
                            ]);
                        }
                    }
@@ -112,6 +115,11 @@ import API from '../../api/config';
                        this.loading = false;
                           //alert(res.status)
                     });
+          },handlePage(v)
+          {
+
+          },handlePageSize(v){
+
           },
             view(index) {
                 let invoice = this.data[index];

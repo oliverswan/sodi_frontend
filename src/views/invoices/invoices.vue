@@ -12,7 +12,11 @@
                    :rowClassfunction="getRowClassName"
                    :columns-list="columns"
                    :loading="loading"
-                   :hoverShow=true
+                   :pageTotal="pageTotal"
+                   :pageNum="pageNum"
+                   :handlePage="handlePage"
+                   :handlePageSize="handlePageSize"
+                   :hoverShow="true"
                ></can-edit-table>
        </Col>
        </Row>
@@ -21,6 +25,7 @@
 
 <script>
 import canEditTable from '../tables/components/canEditTable.vue';
+
 import API from '../../api/config';
 import $ from "jquery";
     export default {
@@ -32,6 +37,9 @@ import $ from "jquery";
               data:[],
               mapping:"",
               loading:false,
+              pageTotal: 0,
+              pageNum: 1,
+              pageSize: 10,
               columns:[{
                   title: 'Seq',
                   type: 'index',
@@ -61,7 +69,7 @@ import $ from "jquery";
               {
                   title: 'Total',
                   align: 'center',
-                  key: 'totalamount'
+                  key: 'subtotals'
               },
               {
                        title: 'Action',
@@ -69,10 +77,24 @@ import $ from "jquery";
                        width: 300,
                        align: 'center',
                        render: (h, params) => {
-                         return  h('div',[ h('div',{style:{float:'left',margin:'auto',cursor:'pointer'},on: {
+                         return  h('div',[
+                         h('Button', {
+                             props: {
+                                 type: 'primary',
+                                 size: 'small'
+                             },
+                             style: {
+                                 marginRight: '5px'
+                             },
+                             on: {
+                                 click: () => {
+                                   this.view(params.index);
+                                 }
+                             }
+                         }, 'View'),
+                         h('div',{style:{float:'left',margin:'auto',cursor:'pointer'},on: {
                                        click: () => {
                                          this.$http.get(API.host+"/api/mail/"+params.row.id).then(function(res){
-                                                       console.log("success!!");
                                                        $("tr:contains('"+params.row.invoiceNumber+"')").addClass('green-row');
                                                    },function(res){
                                                         //alert(res.status)
@@ -82,7 +104,17 @@ import $ from "jquery";
                                      color: '#191970',
                                      width: '20px',
                                      margin:'10px',
-                                     height:'20px'}},'内容2')],
+                                     height:'20px'}},'Send Invoice')],
+
+                         '内容1'),h('div',{style:{float:'left',margin:'auto',cursor:'pointer'},on: {
+                                       click: () => {
+                                          this.view(params.index);
+                                       }
+                                   }},[h('Icon',{ props:{type: 'ios-email-outline'},style:{ fontSize: '38px',
+                                     color: '#228B22',
+                                     width: '20px',
+                                     margin:'10px',
+                                     height:'20px'}},'Edit')],
 
                          '内容1'),h('div',{style:{float:'left',cursor:'pointer'},on: {
                                        click: () => {
@@ -93,17 +125,18 @@ import $ from "jquery";
                                      color: '#FF4500',
                                      width: '20px',
                                      margin:'10px',
-                                     height:'30px'}},'内容2')],
+                                     height:'30px'}},'Invoice')],
 
                          '内容1'),h('div',{style:{float:'left',cursor:'pointer'},on: {
                                        click: () => {
-                                        this.view(params.index);
+                                        let url = API.host+"/api/reports/delivery/"+params.row.id;
+                                        window.open(url);
                                        }
                                    }},[h('Icon',{ props:{type: 'document'},style:{ fontSize: '38px',
                                      color: '#191970',
                                      width: '20px',
                                      margin:'10px',
-                                     height:'30px'}},'内容2')],
+                                     height:'30px'}},'Delivery')],
 
                          '内容1')],'');
 
@@ -117,17 +150,38 @@ import $ from "jquery";
         },// end of data
 
         mounted () {
-            this.getData();
+            this.getData ();
         },
         methods: {
+          handlePage(value) {
+            this.pageNum = value
+            console.log("Page "+value);
+            this.getData ()
+          },
+          // view(index) {
+          //     let invoice = this.data[index];
+          //     alert(invoice[gsts]);
+          //     this.$router.push({
+          //         name: 'viewInvoice',
+          //         params:invoice
+          //     });
+          //   },
+          handlePageSize(value) {
+            this.pageSize = value
+            console.log("pageSize "+value);
+            this.getData ()
+          },
           getData () {
             // this.data =[{"name":"field","values":"\"aaaa\",\"bbbb\",\"cccc\",\"dddddddd\""}];
             this.loading = true;
            //  let _this = this;
-           this.$http.get(API.host+"/api/invoices").then(function(res){
+           let url = API.host+"/api/invoices";
+            url = url + "?pageNum=" + this.pageNum + '&pageSize=' + this.pageSize;
+           this.$http.get(url).then(function(res){
                         this.loading = false;
                          if(res.data){
-                           this.data = res.data;
+                           this.data = res.data.data;
+                           this.pageTotal = parseInt(res.data.message)
                          }
                      },function(res){
                        this.loading = false;

@@ -23,21 +23,54 @@
          </modal>
        </Col>
        </Row>
+       <Row>
+       <Col span="24">
+         <Form ref="item" :label-width="100">
+             <FormItem label="invoiceNumber" prop="opinion">
+                 <Input :disabled="hasSubmit" v-model="invoiceNumber" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input invoiceNumber" />
+             </FormItem>
+             <FormItem label="customName">
+                <customer-select></customer-select>
+                 <!-- <Input :disabled="hasSubmit" v-model="customerName" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input customerName" /> -->
+             </FormItem>
+
+             <FormItem label="Code:">
+                 <Input :disabled="hasSubmit" v-model="code" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input code" />
+             </FormItem>
+             <FormItem label="Quantity:">
+                 <Input :disabled="hasSubmit" v-model="quantity" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input quantity" />
+             </FormItem>
+             <FormItem label="">
+                 <Button :disabled="hasSubmit" @click="handleSubmit" style="width:100px;" type="primary">Add</Button>
+             </FormItem>
+         </Form>
+       </Col>
+       </Row>
+
   </div>
 </template>
 <script>
 import API from '../../api/config'
-import VueBootstrapTable from '../components/VueBootstrapTable.vue';
+import VueBootstrapTable from '../components/VueBootstrapTable.vue'
+import customerSelect from  '../components/CustomerSelect/CustomerSelect.vue'
+import $ from "jquery"
+
 // :default-order-column="invoiceNumber"
     export default {
         components: {
-            VueBootstrapTable
+            VueBootstrapTable,
+            customerSelect
         },
         data () {
             return {
                     columnToSortBy: "invoiceNumber",
                     data:[],
                     current:{},
+                    invoiceNumber:"",
+                    customerName:"",
+                    code:"",
+                    quantity:0,
+                    hasSubmit:false,
                     aj: {
                        enabled: true,
                        url: API.host+"/api/backorders?echo=2",
@@ -55,7 +88,7 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                               title: 'invoiceNumber',
                               visible: true,
                               editable: true,
-                          } 
+                          }
                         ],
                     dialog:{
                           show:false,
@@ -99,7 +132,7 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
 
               for(var o in entry.orders)
 　            {
-                content += o +" x "+entry.orders[o];
+                content +=  o +" x "+entry.orders[o] +"<br/>";
               }
               this.$modal.show('dialog', {
                   title:  entry.invoiceNumber,
@@ -133,6 +166,18 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
           },
           onAjaxLoadingError( data ) {
               console.log("ajaxLoadedEvent - data : " + data );
+          },
+          handleSubmit(){
+            // let cn = $(".v-autocomplete-input").val();
+            let url = API.host+"/api/backorders/addItem?invoiceNumber="+this.invoiceNumber+"&customerName="+$(".v-autocomplete-input").val()+"&code="+this.code+"&quantity="+this.quantity
+            this.$http.get(url).then(function(res){
+                                  if(res.data)
+                                  {
+                                    alert(res.data);
+                                  }
+                              },function(res){
+                                  alert(res.status)
+                              });
           }
       }// end of methods
     }

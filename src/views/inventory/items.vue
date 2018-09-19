@@ -18,6 +18,30 @@
          </vue-bootstrap-table>
        </Col>
        </Row>
+       <Row>
+       <Col span="24">
+         <Form ref="item" :label-width="100">
+             <FormItem label="Code" prop="opinion">
+                 <Input :disabled="hasSubmit" v-model="current.code" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input contactName name" />
+             </FormItem>
+             <FormItem label="Name：">
+                 <Input :disabled="hasSubmit" v-model="current.name" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input personName" />
+             </FormItem>
+             <FormItem label="Price：">
+                 <Input :disabled="hasSubmit" v-model="current.price" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input emailAddress" />
+             </FormItem>
+             <FormItem label="cprice：">
+                 <Input :disabled="hasSubmit" v-model="current.cprice" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input poAddressLine1" />
+             </FormItem>
+             <FormItem label="GL：">
+                 <Input :disabled="hasSubmit" v-model="current.accountCode" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input GL" />
+             </FormItem>
+             <FormItem label="">
+                 <Button :disabled="hasSubmit" @click="handleSubmit" style="width:100px;" type="primary">Add</Button>
+             </FormItem>
+         </Form>
+       </Col>
+       </Row>
   </div>
 </template>
 <script>
@@ -32,6 +56,8 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
         data () {
             return {
               data:[],
+              current:{},
+              hasSubmit:false,
               aj: {
                  enabled: true,
                  url: API.host+"/api/items?echo=1",
@@ -81,6 +107,11 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                 title: 'weight',
                 visible: true,
                 editable: true,
+              },
+              {
+                title: 'accountCode',
+                visible: true,
+                editable: true,
               }
               ]
             }
@@ -99,10 +130,22 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                       });
               },
               onAjaxLoadedEvent( data ) {
+                alert("xxx");
                   console.log("ajaxLoadedEvent - data : " + data );
               },
               onAjaxLoadingError( data ) {
                   console.log("ajaxLoadedEvent - data : " + data );
+              },
+              handleSubmit(){
+                this.$http.post(API.host+"/api/items/add",this.current, {  headers: {  'Content-Type': 'application/json'  }  }
+                    ).then(function(res){
+                                // this.data = {};
+                                 console.log("success！");
+                                  // console.log(res.data.body.message);
+                      },function(res){
+                                     // this.data = {};
+                                           console.log(res.body.message);
+                      });
               }
         }
     }
