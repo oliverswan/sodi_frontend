@@ -4,7 +4,7 @@
       <Col>
           <Card shadow>
                 <p slot="title">Inovice Information: </p>
-                <p><b> Invoice Number:   </b>{{invoice.invoiceNumber}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> Contact Name:   </b>{{invoice.contactName}}</p>
+                <p><b> Invoice Number:   </b><Input v-model="invoice.invoiceNumber" style="width: 20%"></Input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> Contact Name:   </b><Input v-model="invoice.contactName" style="width: 20%"></Input></p>
                 <p><b> Invoice Date:   </b>{{invoice.invoiceDate}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> Due Date:   </b>{{invoice.dueDate}}</p>
                 <p><b> Total Amount:   </b>{{invoice.subtotals}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </Card>
@@ -18,7 +18,7 @@
 
     <Row style="margin-top:10px">
        <Col span="24">
-         <edit-table :columns="columns"  :invoice="invoice" ></edit-table>
+         <edit-table :columns="columns"  :invoice="invoice" :isCreate="isCreate"></edit-table>
          <!-- <Table  :columns="columns"  :data="invoice.items" border></Table> :items="invoice.items" -->
        </Col>
        </Row>
@@ -34,6 +34,7 @@ import editTable from '../components/editTable/editTable.vue';
         data () {
             return {
                invoice:{},
+               isCreate:false,
                columns:["inventoryItemCode","description","quantity","unitAmount","totalamounts","gsts","subtotals","accountCode"]
 
               // loading:true,
@@ -94,6 +95,10 @@ import editTable from '../components/editTable/editTable.vue';
           if(this.$route.params)
           {
             this.invoice = this.$route.params;
+            if(this.invoice.isCreate)
+            {
+              this.isCreate = true;
+            }
           }
         },
         methods: {

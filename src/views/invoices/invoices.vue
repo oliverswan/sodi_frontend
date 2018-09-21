@@ -20,6 +20,9 @@
                ></can-edit-table>
        </Col>
        </Row>
+       <Row>
+         <i-button type="primary" style="margin:10px"  @click.prevent="create">Create New Order</i-button>
+       </Row>
   </div>
 </template>
 
@@ -217,6 +220,15 @@ import $ from "jquery";
             },
             handleChange (val, index) {
                 this.$Message.success('修改了第' + (index + 1) + '行数据');
+            },
+            create(){
+              let newinvoice ={};
+              newinvoice.items = [];
+              newinvoice.isCreate = true;
+              this.$router.push({
+                  name: 'viewInvoice',
+                  params:newinvoice
+              });
             },
             approveAll() {
               this.$http.post(API.host+"/api/invoices/approveall2",this.mapping, {  headers: {  'Content-Type': 'text/plain'  }  }

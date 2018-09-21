@@ -71,6 +71,10 @@ import API from '../../../api/config';
         invoice: {
                type: Object,
                default: () => ({})
+        },
+        isCreate:  {
+               type: Boolean,
+               default:false
         }
     },
     // mounted (){
@@ -87,8 +91,8 @@ import API from '../../../api/config';
         input(column,item){
           if(column === 'quantity' ||column === 'unitAmount')
           {
-            item.totalamount = item.quantity * item.unitAmount;
-            item.totalamounts = ""+item.quantity * item.unitAmount;
+            item.totalamount = this.keep2digits(item.quantity * item.unitAmount);
+            item.totalamounts = ""+ this.keep2digits(item.quantity * item.unitAmount);
             item.gst = this.keep2digits(item.totalamount*0.1);
             item.gsts = ""+this.keep2digits(item.totalamount*0.1);
             item.subtotal =this.keep2digits(  item.totalamount +  item.gst );
@@ -116,7 +120,12 @@ import API from '../../../api/config';
           }
       },
       save(){
-        this.$http.post(API.host+"/api/invoices/update",this.invoice, {  headers: {  'Content-Type': 'application/json'  }  }
+        let url =API.host+"/api/invoices/update";
+        if(this.isCreate)
+        {
+          url =API.host+"/api/invoices/add";
+        }
+        this.$http.post(url, this.invoice,{  headers: {  'Content-Type': 'application/json'  }  }
             ).then(function(res){
                         // this.data = {};
                          console.log("success！");
