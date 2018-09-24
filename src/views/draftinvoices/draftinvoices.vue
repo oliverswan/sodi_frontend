@@ -1,9 +1,24 @@
 <template>
+
   <div>
-       <Row>
+      <Table border ref="invoTable" :columns="columns" :data="data" @on-select="tableSelected"></Table>
+      <!-- <can-edit-table
+                   :ref="table1"
+                   v-model="data"
+                   @on-cell-change="handleCellChange"
+                   @on-change="handleChange"
+                   @on-row-click="rowClick"
+                   :editIncell="true"
+                   :columns-list="columns"
+                   :loading="loading"
+                   :handlePage="handlePage"
+                   :handlePageSize="handlePageSize"
+                   :hoverShow=true
+               ></can-edit-table> -->
+               
+       <!-- <Row>
        <Col span="24">
                <can-edit-table
-                   refs="draftTable"
                    v-model="data"
                    @on-cell-change="handleCellChange"
                    @on-change="handleChange"
@@ -16,9 +31,11 @@
                    :hoverShow=true
                ></can-edit-table>
        </Col>
-       </Row>
+      </Row> -->
       <Row>
-        <i-button type="primary" style="margin:10px"  @click.prevent="approveAll">Approve All Drafts</i-button>
+        <Button @click="handleSelectAll(true)">Select All</Button>
+        <Button @click="handleSelectAll(false)">Cancel All selected</Button>
+        <i-button type="primary" style="margin:10px"  @click.prevent="approveAll">Approve Selected</i-button>
       </Row>
   </div>
 </template>
@@ -41,7 +58,14 @@ import API from '../../api/config';
               data:[],
               mapping:"",
               loading:false,
-              columns:[{
+              selected:[],
+              columns:[
+                 {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                },  
+                {
                   title: 'Seq',
                   type: 'index',
                   width: 80,
@@ -79,18 +103,18 @@ import API from '../../api/config';
                                        }
                                    }
                                }, 'View')
-                               // ,
-                               // h('Button', {
-                               //     props: {
-                               //         type: 'error',
-                               //         size: 'small'
-                               //     },
-                               //     on: {
-                               //         click: () => {
-                               //             alert(params.index);
-                               //         }
-                               //     }
-                               // }, 'Delete')
+                               ,
+                               h('Button', {
+                                   props: {
+                                       type: 'primary',
+                                       size: 'small'
+                                   },
+                                   on: {
+                                       click: () => {
+                                          this.approveSingle(params.index);
+                                       }
+                                   }
+                               }, 'approve')
                            ]);
                        }
                    }
@@ -139,16 +163,17 @@ import API from '../../api/config';
             },
             rowClick () {
                 alert("dd");
-
             },
             handleChange (val, index) {
                 this.$Message.success('修改了第' + (index + 1) + '行数据');
             },
             approveAll() {
-              this.$http.post(API.host+"/api/invoices/approveall2",this.mapping, {  headers: {  'Content-Type': 'text/plain'  }  }
+                //'text/plain'
+              this.$http.post(API.host+"/api/invoices/approveMulti",this.selected, {  headers: {  'Content-Type': 'application/json'  }  }
                   ).then(function(res){
                               // this.data = {};
                                console.log("success！");
+                                this.getData();
                                 // console.log(res.data.body.message);
                     },function(res){
                                    // this.data = {};
@@ -156,6 +181,25 @@ import API from '../../api/config';
                     });
 
 
+            },
+             approveSingle(p) {
+              this.$http.post(API.host+"/api/invoices/approveSingle",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
+                  ).then(function(res){
+                              // this.data = {};
+                               console.log("success！");
+                               this.getData();
+                                // console.log(res.data.body.message);
+                    },function(res){
+                                   // this.data = {};
+                                         console.log(res.body.message);
+                    });
+            },
+              handleSelectAll (status) {
+                //   console.log(this.$refs.table1);
+                this.$refs.invoTable.selectAll(status);
+            },
+            tableSelected(selectedArray,currentSelected){
+                    this.selected = selectedArray;
             }
       }// end of methods
     }

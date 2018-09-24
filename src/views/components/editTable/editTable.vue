@@ -125,6 +125,7 @@ import API from '../../../api/config';
         {
           url =API.host+"/api/invoices/add";
         }
+        console.log(this.invoice);
         this.$http.post(url, this.invoice,{  headers: {  'Content-Type': 'application/json'  }  }
             ).then(function(res){
                         // this.data = {};
@@ -142,11 +143,12 @@ import API from '../../../api/config';
                         this.auto_items = res.data;
                       }
                   },function(res){
-                    this.loading = false;
-                       //alert(res.status)
+                    // this.loading = false;
+                       alert("Error: "+res.status);
                  });
       },
       getLabel (item) {
+        if(item)
         return item.name;
       },
       add(){
@@ -169,8 +171,8 @@ import API from '../../../api/config';
 .v-autocomplete
   .v-autocomplete-input-group
     .v-autocomplete-input
-      font-size 1.5em
-      padding 5px 10px
+      font-size 1.3em
+      padding 1px 2px
       box-shadow none
       border 1px solid #157977
       width 100%

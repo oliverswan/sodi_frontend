@@ -1,8 +1,8 @@
 <template>
   <div>
     <b>#{{item.contactName}}</b>
-    <span>{{ item.contactName }}</span>
-    <abbr>{{item.contactName}}</abbr>
+    <!-- <span>{{ item.contactName }}</span> -->
+    <!-- <abbr>{{item.contactName}}</abbr> -->
   </div>
 </template>
 

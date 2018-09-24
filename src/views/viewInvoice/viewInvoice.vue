@@ -4,9 +4,9 @@
       <Col>
           <Card shadow>
                 <p slot="title">Inovice Information: </p>
-                <p><b> Invoice Number:   </b><Input v-model="invoice.invoiceNumber" style="width: 20%"></Input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> Contact Name:   </b><Input v-model="invoice.contactName" style="width: 20%"></Input></p>
+                <p><b> Invoice Number:   </b><Input v-model="invoice.invoiceNumber" style="width: 20%"></Input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> Contact Name:   </b><customer-select @changed="cusNameChanged" :initValue="contactName" style="width:20%;display:inline-block;z-index:9999" id='cusName'></customer-select></p>
                 <p><b> Invoice Date:   </b>{{invoice.invoiceDate}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b> Due Date:   </b>{{invoice.dueDate}}</p>
-                <p><b> Total Amount:   </b>{{invoice.subtotals}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p><b> Total Amount:   </b>{{invoice.subtotals}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Reference: </b><Input v-model="invoice.reference" style="width: 20%"/></p>
             </Card>
 
             <b> Customer Note:   </b>
@@ -26,14 +26,18 @@
 </template>
 <script>
 import editTable from '../components/editTable/editTable.vue';
+import customerSelect from  '../components/CustomerSelect/CustomerSelect.vue'
+import $ from "jquery";
 
   export default {
        components:{
-         editTable
+         editTable,
+         customerSelect
        },
         data () {
             return {
                invoice:{},
+               contactName:"",
                isCreate:false,
                columns:["inventoryItemCode","description","quantity","unitAmount","totalamounts","gsts","subtotals","accountCode"]
 
@@ -99,10 +103,15 @@ import editTable from '../components/editTable/editTable.vue';
             {
               this.isCreate = true;
             }
+            this.contactName = this.invoice.contactName;
           }
         },
         methods: {
           getData () {
+          },
+          cusNameChanged(){
+            console.log($("#cusName input").val());
+            this.invoice.contactName =  $("#cusName input").val();
           }
       }// end of methods
     }

@@ -24,24 +24,24 @@
        </Col>
        </Row>
        <Row>
-       <Col span="24">
+       <Col span="24" style="margin-top:50px">
          <Form ref="item" :label-width="100">
+             
              <FormItem label="invoiceNumber" prop="opinion">
                  <Input :disabled="hasSubmit" v-model="invoiceNumber" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input invoiceNumber" />
              </FormItem>
              <FormItem label="customName">
-                <customer-select></customer-select>
+                <customer-select style="z-index:9999"></customer-select>
                  <!-- <Input :disabled="hasSubmit" v-model="customerName" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input customerName" /> -->
              </FormItem>
-
              <FormItem label="Code:">
                  <Input :disabled="hasSubmit" v-model="code" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input code" />
              </FormItem>
              <FormItem label="Quantity:">
                  <Input :disabled="hasSubmit" v-model="quantity" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input quantity" />
              </FormItem>
-             <FormItem label="">
-                 <Button :disabled="hasSubmit" @click="handleSubmit" style="width:100px;" type="primary">Add</Button>
+              <FormItem label="">
+                 <Button :disabled="hasSubmit" @click="handleSubmit" style="width:100px;" type="primary">Save</Button>
              </FormItem>
          </Form>
        </Col>

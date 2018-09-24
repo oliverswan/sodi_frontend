@@ -1,15 +1,15 @@
 <template>
-
-  <v-autocomplete :items="auto_customers" v-model="auto_customer" :get-label="getLabel" :component-item='template' @update-items="updateAutoItems">
+<div >
+  <v-autocomplete  ref="cusName" style="height:20px" :items="auto_customers"  @blur="blured" :value="initValue" v-model="auto_customer" :get-label="getLabel" :component-item='template' @update-items="updateAutoItems">
     <!-- <div style="clear:both"></div> -->
   </v-autocomplete>
-
+</div>
 </template>
 <script>
 import Autocomplete from 'v-autocomplete'
 import CustmerTemplate from './CustmerTemplate.vue'
 import API from '../../../api/config'
-
+import $ from "jquery";
 
 export default {
   name: 'customerSelect',
@@ -18,28 +18,25 @@ export default {
       CustmerTemplate,
   },
   props: {
-      // columns: {
-      //     type: Array,
-      //     required: true,
-      // },
-      // items: {
-      //       type: Array,
-      //       required: true,
-      // },
-      // invoice: {
-      //        type: Object,
-      //        default: () => ({})
-      // }
+      initValue: {
+             type: String,
+             default:""
+      }
   },
   data () {
        return {
-         auto_customer: {},
+         auto_customer:{},
          auto_customers: [],
          template: CustmerTemplate
        }
   },
+  mounted (){
+    $("#cusName input").val(this.initValue);
+  },
   methods: {
-
+    blured(txt){
+      	this.$emit('changed', txt);
+    },
     updateAutoItems(text){
       this.$http.get(API.host+"/api/contacts/query/"+text).then(function(res){
                     if(res.data){

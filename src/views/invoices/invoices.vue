@@ -1,5 +1,10 @@
 <template>
   <div>
+      <!-- -->
+        <b>Customer Name:  </b>
+        <customer-select style=" width:15%;display:inline-block;z-index:9999"></customer-select>
+        <b>Invoice Number:  </b><Input v-model="invoiceNumber" style="width: 10%"></Input>
+        <i-button type="primary" style="margin:10px;"  @click.prevent="search">Search</i-button>
        <Row>
        <Col span="24">
                <can-edit-table
@@ -28,17 +33,18 @@
 
 <script>
 import canEditTable from '../tables/components/canEditTable.vue';
-
+import customerSelect from  '../components/CustomerSelect/CustomerSelect.vue'
 import API from '../../api/config';
 import $ from "jquery";
     export default {
       components: {
-          canEditTable
+          canEditTable,
+          customerSelect
       },
         data () {
             return {
               data:[],
-              mapping:"",
+              invoiceNumber:"",
               loading:false,
               pageTotal: 0,
               pageNum: 1,
@@ -54,12 +60,12 @@ import $ from "jquery";
                   key: 'orderNumber',
                   editable: false
               },{
-                  title: 'Reference',
+                  title: 'reference',
                   align: 'center',
-                  key: 'Reference',
+                  key: 'reference',
                   editable: false
               },{
-                  title: 'InvoiceNumber',
+                  title: 'invoiceNumber',
                   align: 'center',
                   key: 'invoiceNumber',
                   editable: false
@@ -171,7 +177,6 @@ import $ from "jquery";
           //   },
           handlePageSize(value) {
             this.pageSize = value
-            console.log("pageSize "+value);
             this.getData ()
           },
           getData () {
@@ -240,6 +245,21 @@ import $ from "jquery";
                                    // this.data = {};
                                          console.log(res.body.message);
                     });
+
+
+            },
+            search() {
+            let url = API.host+"/api/invoices/query?customerName="+$(".v-autocomplete-input").val()+"&invoiceNumber="+this.invoiceNumber+"&pageNum=" + this.pageNum + '&pageSize=' + this.pageSize;
+            this.$http.get(url).then(function(res){
+                    if(res.data){
+                      console.log(res.data);
+                      this.data = res.data;
+                    //   this.pageTotal = parseInt(res.data.message)
+                    }
+                },function(res){
+                  this.loading = false;
+                     //alert(res.status)
+               });
 
 
             }
