@@ -88,21 +88,27 @@ import API from '../../../api/config';
          }
     },
     methods: {
+        getDigits( n ){
+          return Math.round(n * 100) / 100;
+        },
         input(column,item){
           if(column === 'quantity' ||column === 'unitAmount')
           {
-            item.totalamount = this.keep2digits(item.quantity * item.unitAmount);
-            item.totalamounts = ""+ this.keep2digits(item.quantity * item.unitAmount);
-            item.gst = this.keep2digits(item.totalamount*0.1);
-            item.gsts = ""+this.keep2digits(item.totalamount*0.1);
-            item.subtotal =this.keep2digits(  item.totalamount +  item.gst );
-            item.subtotals = ""+this.keep2digits(  item.totalamount +  item.gst );
+            item.totalamount = this.getDigits( item.quantity * item.unitAmount  );
+            item.totalamounts = ""+ item.totalamount;
+            item.gst = this.getDigits(item.totalamount*0.1);
+            item.gsts = ""+item.gst;
+            item.subtotal =this.getDigits(  item.totalamount +  item.gst );
+            item.subtotals = ""+item.subtotal;
             let total =0.00;
+            let totalm =0.00;
             this.invoice.items.forEach(function (item, i) {
                 total = total +item.subtotal;
+                totalm  += totalm + item.totalamount;
             });
-            this.invoice.subtotal = this.keep2digits(total);
-            this.invoice.subtotals =""+ this.keep2digits(total);
+            this.invoice.totalamount =  this.getDigits(totalm);
+            this.invoice.subtotal = this.getDigits(total);
+            this.invoice.subtotals =""+  this.invoice.subtotal;
           }
         },
         keep2digits(num)
@@ -129,9 +135,10 @@ import API from '../../../api/config';
         this.$http.post(url, this.invoice,{  headers: {  'Content-Type': 'application/json'  }  }
             ).then(function(res){
                         // this.data = {};
-                         console.log("success！");
+                         alert("success！");
                           // console.log(res.data.body.message);
               },function(res){
+                        alert("fail!");
                              // this.data = {};
                                    // console.log(res.body.message);
               });
