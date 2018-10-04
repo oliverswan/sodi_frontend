@@ -2,7 +2,7 @@
   <div>
        <Row>
        <Col span="24">
-         <vue-bootstrap-table
+         <items-table
            :columns="columns"
            :values="data"
            :show-filter="true"
@@ -11,11 +11,12 @@
            :paginated="true"
            :filter-case-sensitive="false"
            :default-order-direction="true"
+           :options="options"
            @cellDataModifiedEvent="onCellDataModifiedEvent"
            @ajaxLoadedEvent="onAjaxLoadedEvent"
            @ajaxLoadingErro="onAjaxLoadingError"
            >
-         </vue-bootstrap-table>
+         </items-table>
        </Col>
        </Row>
        <Row>
@@ -47,17 +48,21 @@
 <script>
 // :default-order-column="code"
 import API from '../../api/config';
-import VueBootstrapTable from '../components/VueBootstrapTable.vue';
+import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
 
     export default {
         components: {
-            VueBootstrapTable
+            ItemsTable
         },
         data () {
             return {
               data:[],
               current:{},
               hasSubmit:false,
+              options: {
+                undefinedText: 'n/a',
+                showPaginationSwitch: true,
+              },
               aj: {
                  enabled: true,
                  url: API.host+"/api/items?echo=1",
@@ -112,12 +117,36 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                 title: 'accountCode',
                 visible: true,
                 editable: true,
+              },
+              {
+                title: 'coming',
+                visible: true,
+                editable: true,
+              }, {
+                  title: "Action",
+                  name:"code",
+                  visible: true,
+                  renderfunction: this.renderTableAction
               }
               ]
             }
         },
-
         methods:{
+              renderTableAction(colname, entry){
+                     // glyphicon-ok glyphicon-remove
+                   return  Vue.compile('<div class="btn-group" role="group"  ref="actiondiv" >'+
+                        '  <button type="button" class="btn btn-sm btn-primary"><span class="glyphicon " @click="receiveClick" aria-hidden="true">Receive</span></button>'+
+                        '  <button type="button" class="btn btn-sm btn-danger"><span class="glyphicon " aria-hidden="true">'+entry.coming+'</span></button>'+
+                        '</div>');
+
+                    //  return '<div class="btn-group" role="group"  ref="actiondiv" >'+
+                    //     '  <button type="button" class="btn btn-sm btn-primary"><span class="glyphicon " @click.stop="receiveClick" aria-hidden="true">Receive</span></button>'+
+                    //     '  <button type="button" class="btn btn-sm btn-danger"><span class="glyphicon " aria-hidden="true">'+entry.coming+'</span></button>'+
+                    //     '</div>';
+              },
+              receiveClick(){
+                  alert("xxx");
+              },
               onCellDataModifiedEvent(originalValue, newValue, columnTitle, entry){
                 this.$http.post(API.host+"/api/items/save",entry, {  headers: {  'Content-Type': 'application/json'  }  }
                     ).then(function(res){
@@ -130,7 +159,6 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                       });
               },
               onAjaxLoadedEvent( data ) {
-                alert("xxx");
                   console.log("ajaxLoadedEvent - data : " + data );
               },
               onAjaxLoadingError( data ) {
