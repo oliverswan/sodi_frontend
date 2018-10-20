@@ -186,7 +186,7 @@ import API from '../../api/config';
               this.$http.post(API.host+"/api/invoices/approveSingle",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
                   ).then(function(res){
                               // this.data = {};
-                               console.log("success！");
+                               alert(res.data);
                                this.getData();
                                 // console.log(res.data.body.message);
                     },function(res){

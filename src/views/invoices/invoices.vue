@@ -83,7 +83,7 @@ import $ from "jquery";
               {
                        title: 'Action',
                        key: 'action',
-                       width: 300,
+                       width: 400,
                        align: 'center',
                        render: (h, params) => {
                          return  h('div',[
@@ -101,6 +101,20 @@ import $ from "jquery";
                                  }
                              }
                          }, 'View'),
+                         h('Button', {
+                             props: {
+                                 type: 'primary',
+                                 size: 'small'
+                             },
+                             style: {
+                                 marginRight: '5px'
+                             },
+                             on: {
+                                 click: () => {
+                                   this.approveSingle(params.index);
+                                 }
+                             }
+                         }, 'Reimport'),
                          h('div',{style:{float:'left',margin:'auto',cursor:'pointer'},on: {
                                        click: () => {
                                          this.$http.get(API.host+"/api/mail/"+params.row.id).then(function(res){
@@ -247,6 +261,18 @@ import $ from "jquery";
                     });
 
 
+            },
+            approveSingle(p) {
+              this.$http.post(API.host+"/api/invoices/approveSingle",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
+                  ).then(function(res){
+                              // this.data = {};
+                               alert(res.data);
+                               this.getData();
+                                // console.log(res.data.body.message);
+                    },function(res){
+                                   // this.data = {};
+                                         console.log(res.body.message);
+                    });
             },
             search() {
             let url = API.host+"/api/invoices/query?customerName="+$(".v-autocomplete-input").val()+"&invoiceNumber="+this.invoiceNumber+"&pageNum=" + this.pageNum + '&pageSize=' + this.pageSize;

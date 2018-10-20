@@ -361,6 +361,9 @@
             this.$off('cellDataModifiedEvent', self.fireCellDataModifiedEvent);
         },
         watch: {
+            values:function(){
+                 this.rawValues = this.values;
+            },
             rawValues: function () {
                 this.processFilter();
             },

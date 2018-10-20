@@ -13,6 +13,11 @@
            <B>Delivery Report: </B>&nbsp;&nbsp;&nbsp;&nbsp;
            <i-button type="primary" style="margin:10px"  @click.prevent="report_delivery">Generate</i-button>
           </Row>
+           <Row>
+           <B>Monthly sales Report: </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <Input v-model="monthlySales" placeholder="Enter month for sales history..." style="width: 300px" />
+           <i-button type="primary" style="margin:10px"  @click.prevent="report_monthlysales">Generate</i-button>
+          </Row>
   </div>
 </template>
 <script>
@@ -21,7 +26,8 @@ import API from '../../api/config';
     export default {
         data () {
             return {
-              month:0
+              month:0,
+              monthlySales:0
             }
         },
         methods: {
@@ -57,6 +63,9 @@ import API from '../../api/config';
             }  ,report_delivery() {
                 let url = API.host+"/api/reports/backorderDelivery";
                 window.open(url);
+            },report_monthlysales(){
+               let url = API.host+"/api/reports/salehistory/" + this.monthlySales;
+              window.open(url);
             }
 
       }// end of methods

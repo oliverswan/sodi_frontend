@@ -1,5 +1,19 @@
 <template>
   <div>
+    <Row>
+       <Col span="24">
+              <span>Moth stock on hand: </span>
+               <i-select v-model="criteria" style="width:200px">
+                  <i-option v-for="cri in criteriaList" :value="cri.value">{{ cri.label }}</i-option>
+              </i-select>
+               <i-select v-model="operatorValue" style="width:200px">
+                  <i-option v-for="op in operatorList" :value="op.value">{{ op.label }}</i-option>
+              </i-select>
+              <Input v-model="criteriaValue" type="text" style="width:5%" />
+              <Button @click="search" style="width:100px;display:inline-block" type="primary">Search</Button>
+       </Col>
+       </Row>
+
        <Row>
        <Col span="24">
          <items-table
@@ -7,8 +21,8 @@
            :values="data"
            :show-filter="true"
            :sortable="true"
-           :ajax="aj"
            :paginated="true"
+           :ajax="aj"
            :filter-case-sensitive="false"
            :default-order-direction="true"
            :options="options"
@@ -17,6 +31,13 @@
            @ajaxLoadingErro="onAjaxLoadingError"
            >
          </items-table>
+       </Col>
+       </Row>
+       <Row>
+       <Col span="24">
+              <span>Recalculate Base On Total sold: </span>
+              <Input v-model="monthAve" type="text" style="width:5%" />
+              <Button @click="handleRecalculate" style="width:100px;display:inline-block" type="primary">recalculate</Button>
        </Col>
        </Row>
        <Row>
@@ -59,12 +80,40 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
               data:[],
               current:{},
               hasSubmit:false,
+              monthAve:5,
+              criteria:"",
+              criteriaList: [
+                    {
+                        value: 'msoh',
+                        label: 'Moth Stock'
+                    },
+                    {
+                        value: 'spm',
+                        label: 'Sales Per Month'
+                    }
+                ],
+                operatorList: [
+                    {
+                        value: '>',
+                        label: '>'
+                    },
+                    {
+                        value: '=',
+                        label: '='
+                    },
+                     {
+                        value: '<',
+                        label: '<'
+                    },
+                ],
+              criteriaValue:"",
+              operatorValue:"",
               options: {
                 undefinedText: 'n/a',
                 showPaginationSwitch: true,
               },
               aj: {
-                 enabled: true,
+                 enabled: false,
                  url: API.host+"/api/items?echo=1",
                  method: "GET",
                  delegate: false
@@ -122,6 +171,10 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 title: 'coming',
                 visible: true,
                 editable: true,
+              },{
+                title: 'location',
+                visible: true,
+                editable: true,
               }, {
                   title: "Action",
                   name:"code",
@@ -131,7 +184,17 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
               ]
             }
         },
+        mounted:function(){
+              let url = API.host+"/api/items?echo=1";
+                 this.$http.get(url).then(function(res){
+                        this.data = res.data.data;
+                     },function(res){
+                       this.loading = false;
+                          //alert(res.status)
+                    });
+        },
         methods:{
+
               renderTableAction(colname, entry){
                      // glyphicon-ok glyphicon-remove
                    return  Vue.compile('<div class="btn-group" role="group"  ref="actiondiv" >'+
@@ -146,6 +209,27 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
               },
               receiveClick(){
                   alert("xxx");
+              },
+              handleRecalculate(){
+
+                   let url = API.host+"/api/items/recalculate/"+this.monthAve;
+                 this.$http.get(url).then(function(res){
+                        alert("success!");
+                     },function(res){
+                       this.loading = false;
+                          //alert(res.status)
+                    });
+
+                alert(this.monthAve);
+              },
+              search(){
+                 let url = API.host+"/api/items/search?criteria="+this.criteria+"&operator="+this.operatorValue+"&criteriaValue="+this.criteriaValue;
+                 this.$http.get(url).then(function(res){
+                        this.data = res.data;
+                     },function(res){
+                       this.loading = false;
+                          //alert(res.status)
+                    });
               },
               onCellDataModifiedEvent(originalValue, newValue, columnTitle, entry){
                 this.$http.post(API.host+"/api/items/save",entry, {  headers: {  'Content-Type': 'application/json'  }  }
