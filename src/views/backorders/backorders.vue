@@ -40,9 +40,12 @@
              <FormItem label="Quantity:">
                  <Input :disabled="hasSubmit" v-model="quantity" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input quantity" />
              </FormItem>
-              <FormItem label="">
-                 <Button :disabled="hasSubmit" @click="handleSubmit" style="width:100px;" type="primary">Save</Button>
-             </FormItem>
+              <!-- <FormItem label=""> -->
+                 <Button :disabled="hasSubmit" @click="handleSubmit" style="width:100px; display: inline-block;" type="primary">Add</Button>
+             <!-- </FormItem> -->
+              <!-- <FormItem label="" style="display: inline-block;" > -->
+                 <Button :disabled="hasSubmit" @click="CompleteSome" style="width:100px;display:inline" type="primary">Deduct</Button>
+             <!-- </FormItem> -->
          </Form>
        </Col>
        </Row>
@@ -178,7 +181,19 @@ import $ from "jquery"
                               },function(res){
                                   alert(res.status)
                               });
-          }
+          },
+          CompleteSome(){
+            // let cn = $(".v-autocomplete-input").val();
+            let url = API.host+"/api/backorders/removeItem?invoiceNumber="+this.invoiceNumber+"&customerName="+$(".v-autocomplete-input").val()+"&code="+this.code+"&quantity="+this.quantity
+            this.$http.get(url).then(function(res){
+                                  if(res.data)
+                                  {
+                                    alert(res.data);
+                                  }
+                              },function(res){
+                                  alert(res.status)
+                              });
+          },
       }// end of methods
     }
 </script>

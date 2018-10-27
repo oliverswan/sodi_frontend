@@ -32,6 +32,10 @@
                ></can-edit-table>
        </Col>
       </Row> -->
+       <v-dialog/>
+         <modal name="detail">
+         "ffffffffffffffff"
+         </modal>
       <Row>
         <Button @click="handleSelectAll(true)">Select All</Button>
         <Button @click="handleSelectAll(false)">Cancel All selected</Button>
@@ -42,7 +46,7 @@
 <script>
 import canEditTable from '../tables/components/canEditTable.vue';
 import API from '../../api/config';
-
+import $ from "jquery"
 // <Row>
 //   <Col span="24">
 //      <Input v-model="mapping" type="textarea"  :rows="20" placeholder="Enter mapping..." />
@@ -80,12 +84,17 @@ import API from '../../api/config';
                   title: 'Name',
                   align: 'center',
                   key: 'contactName'
+              },{
+                  title: 'Amount',
+                  align: 'center',
+                  key: 'totalamounts',
+                  editable: false
               },
 
               {
                        title: 'Action',
                        key: 'action',
-                       width: 150,
+                       width: 300,
                        align: 'center',
                        render: (h, params) => {
                            return h('div', [
@@ -109,12 +118,26 @@ import API from '../../api/config';
                                        type: 'primary',
                                        size: 'small'
                                    },
+                                   style: {
+                                       marginRight: '5px'
+                                   },
+                                   on: {
+                                       click: () => {
+                                         this.checkInventory(params.index);
+                                       }
+                                   }
+                               }, 'Check Inventory'),
+                               h('Button', {
+                                   props: {
+                                       type: 'primary',
+                                       size: 'small'
+                                   },
                                    on: {
                                        click: () => {
                                           this.approveSingle(params.index);
                                        }
                                    }
-                               }, 'approve')
+                               }, 'Approve')
                            ]);
                        }
                    }
@@ -192,6 +215,29 @@ import API from '../../api/config';
                     },function(res){
                                    // this.data = {};
                                          console.log(res.body.message);
+                    });
+            },
+            checkInventory(index)
+            {
+                     let url = API.host+"/api/invoices/check/"+this.data[index].id;
+                     //let that = this;
+                     
+                     this.$http.get(url).then(function(res){
+                         if(res.data){
+                           let content =res.data;
+                           this.$modal.show('dialog', {
+                            title: 'Inventory',
+                            text: content,
+                            buttons: [
+                                {
+                                title: 'Close'
+                                }
+                            ]
+                    });
+                         }
+                     },function(res){
+                       this.loading = false;
+                          //alert(res.status)
                     });
             },
               handleSelectAll (status) {
