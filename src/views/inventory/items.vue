@@ -143,7 +143,7 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 editable: true,
               },
               {
-                title: 'soldThisYear',
+                title: 'value',
                 visible: true,
                 editable: true,
               },
@@ -163,7 +163,7 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 editable: true,
               },
               {
-                title: 'accountCode',
+                title: 'profit',
                 visible: true,
                 editable: true,
               },

@@ -87,7 +87,7 @@ import $ from "jquery"
               },{
                   title: 'Amount',
                   align: 'center',
-                  key: 'totalamounts',
+                  key: 'subtotals',
                   editable: false
               },
 
