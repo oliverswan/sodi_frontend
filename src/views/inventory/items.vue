@@ -2,7 +2,7 @@
   <div>
     <Row>
        <Col span="24">
-              <span>Moth stock on hand: </span>
+              <!-- <span>Moth stock on hand: </span> -->
                <i-select v-model="criteria" style="width:200px">
                   <i-option v-for="cri in criteriaList" :value="cri.value">{{ cri.label }}</i-option>
               </i-select>
@@ -168,7 +168,7 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 editable: true,
               },
               {
-                title: 'coming',
+                title: 'spriceAu',
                 visible: true,
                 editable: true,
               },{
