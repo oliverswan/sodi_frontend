@@ -81,6 +81,12 @@ import $ from "jquery"
                   editable: false
               },
               {
+                  title: 'reference',
+                  align: 'center',
+                  key: 'reference',
+                  editable: false
+              },
+              {
                   title: 'Name',
                   align: 'center',
                   key: 'contactName'
@@ -94,26 +100,11 @@ import $ from "jquery"
               {
                        title: 'Action',
                        key: 'action',
-                       width: 300,
+                       width: 330,
                        align: 'center',
                        render: (h, params) => {
                            return h('div', [
-                               h('Button', {
-                                   props: {
-                                       type: 'primary',
-                                       size: 'small'
-                                   },
-                                   style: {
-                                       marginRight: '5px'
-                                   },
-                                   on: {
-                                       click: () => {
-                                         this.view(params.index);
-                                       }
-                                   }
-                               }, 'View')
-                               ,
-                               h('Button', {
+                                h('Button', {
                                    props: {
                                        type: 'primary',
                                        size: 'small'
@@ -132,12 +123,42 @@ import $ from "jquery"
                                        type: 'primary',
                                        size: 'small'
                                    },
+                                   style: {
+                                       marginRight: '5px'
+                                   },
+                                   on: {
+                                       click: () => {
+                                         this.view(params.index);
+                                       }
+                                   }
+                               }, 'Edit')
+                               ,
+                              
+                               h('Button', {
+                                   props: {
+                                       type: 'primary',
+                                       size: 'small'
+                                   },
+                                   style: {
+                                       marginRight: '5px'
+                                   },
                                    on: {
                                        click: () => {
                                           this.approveSingle(params.index);
                                        }
                                    }
-                               }, 'Approve')
+                               }, 'Approve'),
+                               h('Button', {
+                                   props: {
+                                       type: 'primary',
+                                       size: 'small'
+                                   },
+                                   on: {
+                                       click: () => {
+                                          this.approvceBackorder(params.index);
+                                       }
+                                   }
+                               }, 'Clean B/O')
                            ]);
                        }
                    }
@@ -217,6 +238,20 @@ import $ from "jquery"
                                          console.log(res.body.message);
                     });
             },
+
+            approvceBackorder(p) {
+              this.$http.post(API.host+"/api/invoices/approveBackorder",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
+                  ).then(function(res){
+                              // this.data = {};
+                               alert(res.data);
+                               this.getData();
+                                // console.log(res.data.body.message);
+                    },function(res){
+                                   // this.data = {};
+                                         console.log(res.body.message);
+                    });
+            },
+
             checkInventory(index)
             {
                      let url = API.host+"/api/invoices/check/"+this.data[index].id;
