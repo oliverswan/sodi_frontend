@@ -36,6 +36,11 @@
          <modal name="detail">
          "ffffffffffffffff"
          </modal>
+         <modal name="Processing"  :adaptive="true" width="100%" height="100%">
+            <div>
+                <h1>Processing!</h1>
+            </div>     
+         </modal>
       <Row>
         <Button @click="handleSelectAll(true)">Select All</Button>
         <Button @click="handleSelectAll(false)">Cancel All selected</Button>
@@ -227,10 +232,12 @@ import $ from "jquery"
 
             },
              approveSingle(p) {
+                 this.$modal.show('Processing');
               this.$http.post(API.host+"/api/invoices/approveSingle",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
                   ).then(function(res){
                               // this.data = {};
-                               alert(res.data);
+                                this.$modal.hide('Processing');
+                                alert(res.data);
                                this.getData();
                                 // console.log(res.data.body.message);
                     },function(res){

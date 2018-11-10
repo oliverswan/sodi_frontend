@@ -115,6 +115,20 @@ import $ from "jquery";
                                  }
                              }
                          }, 'Reimport'),
+                          h('Button', {
+                             props: {
+                                 type: 'primary',
+                                 size: 'small'
+                             },
+                             style: {
+                                 marginRight: '5px'
+                             },
+                             on: {
+                                 click: () => {
+                                   this.undo(params.index);
+                                 }
+                             }
+                         }, 'Out Stock'),
                          h('div',{style:{float:'left',margin:'auto',cursor:'pointer'},on: {
                                        click: () => {
                                          this.$http.get(API.host+"/api/mail/"+params.row.id).then(function(res){
@@ -264,6 +278,18 @@ import $ from "jquery";
             },
             approveSingle(p) {
               this.$http.post(API.host+"/api/invoices/approveSingle",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
+                  ).then(function(res){
+                              // this.data = {};
+                               alert(res.data);
+                               this.getData();
+                                // console.log(res.data.body.message);
+                    },function(res){
+                                   // this.data = {};
+                                         console.log(res.body.message);
+                    });
+            },
+            undo(p) {
+              this.$http.post(API.host+"/api/invoices/undo",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
                   ).then(function(res){
                               // this.data = {};
                                alert(res.data);

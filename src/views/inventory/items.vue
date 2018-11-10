@@ -252,7 +252,7 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 this.$http.post(API.host+"/api/items/add",this.current, {  headers: {  'Content-Type': 'application/json'  }  }
                     ).then(function(res){
                                 // this.data = {};
-                                 console.log("success！");
+                                 alert("success！");
                                   // console.log(res.data.body.message);
                       },function(res){
                                      // this.data = {};
