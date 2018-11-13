@@ -58,11 +58,12 @@ export const otherRouter = {
     children: [
         { path: 'home', title: {i18n: 'home'}, name: 'home_index', component: () => import('@/views/home/home.vue') },
         { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: () => import('@/views/own-space/own-space.vue') },
-        { path: 'order/:order_id', title: '订单详情', name: 'order-info', component: () => import('@/views/advanced-router/component/order-info.vue') }, // 用于展示动态路由
+        // { path: 'order/:order_id', title: '订单详情', name: 'order-info', component: () => import('@/views/advanced-router/component/order-info.vue') }, // 用于展示动态路由
         { path: 'shopping', title: '购物详情', name: 'shopping', component: () => import('@/views/advanced-router/component/shopping-info.vue') }, // 用于展示带参路由
         { path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue') },
         { path: 'ruleeditor',title: 'RuleEditor',name: 'ruleeditor', component: () => import('@/views/editrule/editrule.vue') },
         { path: 'viewInvoice',title: 'ViewInvoice',name: 'viewInvoice', component: () => import('@/views/viewinvoice/viewInvoice.vue') },
+        { path: 'viewSodiOrder',title: 'viewSodiOrder',name: 'viewSodiOrder', component: () => import('@/views/orders/vieworders.vue') },
         { path: 'viewbackorder',title: 'BackOrder Details',name: 'viewbackorder', component: () => import('@/views/viewbackorder/viewbackorder.vue') }
         ]
 };
@@ -189,15 +190,15 @@ export const appRouter = [
         ]
     },
         {
-            path: '/test',
+            path: '/order',
             icon: 'ionic',
-            title: 'Test',
-            name: 'test',
+            title: 'Order',
+            name: 'order',
             // 仍然使用Main组件，将内容展现到Main的子routerview里面去
             component: Main,
             children: [
                 // 注意name的属性值一定要加_index的规则
-                { path: 'index', title: 'Test', name: 'test_index', component: () => import('@/views/components/editTable/editTable.vue') }
+                { path: 'index', title: 'Order', name: 'order_index', component: () => import('@/views/orders/orders.vue') }
             ]
         }
 
