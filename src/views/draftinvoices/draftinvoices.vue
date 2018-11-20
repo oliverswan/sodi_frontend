@@ -1,7 +1,7 @@
 <template>
 
   <div>
-      <Table border ref="invoTable" :columns="columns" :data="data" @on-select="tableSelected"></Table>
+      <Table border ref="invoTable"  :row-class-name="getRowClassName" :columns="columns" :data="data" @on-select="tableSelected"></Table>
       <!-- <can-edit-table
                    :ref="table1"
                    v-model="data"
@@ -194,6 +194,18 @@ import $ from "jquery"
           },handlePageSize(v){
 
           },
+          getRowClassName (row, index) {
+
+                     if(row.contactName === "Baykarts limited"||row.contactName === "Formula Challenge Limited"||row.contactName === "Pro Karts"||row.contactName === "Daytona Raceway")
+                     {
+                            return 'green-row';
+                      }  else if(row.contactName === "The Kart Centre"||row.contactName === "Ultimate Karting Sydney")
+                        {
+                            return 'yellow-row';
+                        }
+                      return '';
+            },
+
             view(index) {
                 let invoice = this.data[index];
                 this.$router.push({
@@ -292,3 +304,11 @@ import $ from "jquery"
       }// end of methods
     }
 </script>
+<style>
+.green-row td{
+   background-color: #8FBC8F;
+}
+.yellow-row td{
+   background-color: rgb(223, 238, 20);
+}
+</style>

@@ -104,6 +104,15 @@ import $ from "jquery";
               this.isCreate = true;
             }
             this.contactName = this.invoice.contactName;
+            if(this.contactName === "Baykarts limited"||this.contactName === "Formula Challenge Limited"||this.contactName === "Pro Karts"||this.contactName === "Daytona Raceway")
+            {
+              alert("Customer from NewZealand, Gst is $0.00");
+            }
+            //  if(contact.getContactName().equals("The Kart Centre")||contact.getContactName().equals("Ultimate Karting Sydney"))
+             if(this.contactName === "The Kart Centre"||this.contactName === "Ultimate Karting Sydney")
+            {
+              alert("Customer has 80% discount or free shipping");
+            }
           }
         },
         methods: {
