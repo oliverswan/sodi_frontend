@@ -207,6 +207,6 @@ export default {
 
 <style lang="less">
 .count-style{
-  font-size: 40px;
+  font-size: 20px;
 }
 </style>

@@ -158,17 +158,21 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 editable: true,
               },
               {
-                title: 'weight',
+                title: 'cprice',
                 visible: true,
                 editable: true,
               },
               {
-                title: 'profit',
+                title: 'sprice',
                 visible: true,
                 editable: true,
               },
               {
                 title: 'spriceAu',
+                visible: true,
+                editable: true,
+              },{
+                title: 'profit',
                 visible: true,
                 editable: true,
               },{
