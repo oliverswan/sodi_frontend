@@ -4,7 +4,10 @@
         <b>Customer Name:  </b>
         <customer-select style=" width:15%;display:inline-block;z-index:9999"></customer-select>
         <b>Invoice Number:  </b><Input v-model="invoiceNumber" style="width: 10%"></Input>
+        <b>Start from Id:  </b><Input v-model="inId" style="width: 10%"></Input>
+        <b>Code:  </b><Input v-model="itCode" style="width: 10%"></Input>
         <i-button type="primary" style="margin:10px;"  @click.prevent="search">Search</i-button>
+        <i-button type="primary" style="margin:10px;"  @click.prevent="searchItem">Search Item</i-button>
        <Row>
        <Col span="24">
                <can-edit-table
@@ -45,6 +48,8 @@ import $ from "jquery";
             return {
               data:[],
               invoiceNumber:"",
+              inId:0,
+              itCode:"",
               loading:false,
               pageTotal: 0,
               pageNum: 1,
@@ -54,6 +59,11 @@ import $ from "jquery";
                   type: 'index',
                   width: 80,
                   align: 'center'
+              },{
+                  title: 'Id',
+                  align: 'center',
+                  key: 'id',
+                  editable: false
               },{
                   title: 'orderId',
                   align: 'center',
@@ -312,8 +322,19 @@ import $ from "jquery";
                   this.loading = false;
                      //alert(res.status)
                });
-
-
+            },
+            searchItem() {
+            let url = API.host+"/api/invoices/querybycode?id="+this.inId+"&code="+this.itCode;
+            this.$http.get(url).then(function(res){
+                    if(res.data){
+                      console.log(res.data);
+                      this.data = res.data;
+                    //   this.pageTotal = parseInt(res.data.message)
+                    }
+                },function(res){
+                  this.loading = false;
+                     //alert(res.status)
+               });
             }
       }// end of methods
     }

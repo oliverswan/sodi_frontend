@@ -105,7 +105,7 @@ import $ from "jquery"
               {
                        title: 'Action',
                        key: 'action',
-                       width: 330,
+                       width: 410,
                        align: 'center',
                        render: (h, params) => {
                            return h('div', [
@@ -153,6 +153,20 @@ import $ from "jquery"
                                        }
                                    }
                                }, 'Approve'),
+                               h('Button', {
+                                   props: {
+                                       type: 'primary',
+                                       size: 'small'
+                                   },
+                                   style: {
+                                       marginRight: '5px'
+                                   },
+                                   on: {
+                                       click: () => {
+                                          this.goBO(params.index);
+                                       }
+                                   }
+                               }, 'Go BO'),
                                h('Button', {
                                    props: {
                                        type: 'primary',
@@ -281,6 +295,29 @@ import $ from "jquery"
                            let content =res.data;
                            this.$modal.show('dialog', {
                             title: 'Inventory',
+                            text: content,
+                            buttons: [
+                                {
+                                title: 'Close'
+                                }
+                            ]
+                    });
+                         }
+                     },function(res){
+                       this.loading = false;
+                          //alert(res.status)
+                    });
+            },
+            goBO(index)
+            {
+                let url = API.host+"/api/invoices/gobo/"+this.data[index].id;
+                     //let that = this;
+                     
+                     this.$http.get(url).then(function(res){
+                         if(res.data){
+                           let content =res.data;
+                           this.$modal.show('dialog', {
+                            title: 'Go Bo',
                             text: content,
                             buttons: [
                                 {
