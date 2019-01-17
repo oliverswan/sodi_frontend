@@ -216,7 +216,7 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
               },
               handleRecalculate(){
 
-                   let url = API.host+"/api/items/recalculate/"+this.monthAve;
+                   let url = API.host+"/api/items/updatesales/"+this.monthAve;
                  this.$http.get(url).then(function(res){
                         alert("success!");
                      },function(res){
