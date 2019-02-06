@@ -35,7 +35,7 @@
        </Row>
        <Row>
        <Col span="24">
-              <span>Recalculate Base On Total sold: </span>
+              <span>Recalculate Base On Monthly sales: </span>
               <Input v-model="monthAve" type="text" style="width:5%" />
               <Button @click="handleRecalculate" style="width:100px;display:inline-block" type="primary">recalculate</Button>
        </Col>
@@ -158,7 +158,7 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 editable: true,
               },
               {
-                title: 'cprice',
+                title: 'coming',
                 visible: true,
                 editable: true,
               },

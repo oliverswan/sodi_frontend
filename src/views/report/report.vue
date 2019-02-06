@@ -6,11 +6,11 @@
           <i-button type="primary" style="margin:10px"  @click.prevent="report">Generate</i-button>
          </Row>
          <Row>
-           <B>Back Order Report: </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <B>Back Order Report (base on itemCode): </B>&nbsp;&nbsp;&nbsp;&nbsp;
            <i-button type="primary" style="margin:10px"  @click.prevent="report_backorder">Generate</i-button>
          </Row>
          <Row>
-           <B>Delivery Report: </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <B>Back Order Report (base on customer): </B>&nbsp;&nbsp;&nbsp;&nbsp;
            <i-button type="primary" style="margin:10px"  @click.prevent="report_delivery">Generate</i-button>
           </Row>
            <Row>
