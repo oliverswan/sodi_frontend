@@ -96,9 +96,18 @@ import API from '../../../api/config';
           {
             item.totalamount = this.getDigits( item.quantity * item.unitAmount  );
             item.totalamounts = ""+ item.totalamount;
-            item.gst = this.getDigits(item.totalamount*0.1);
-            item.gsts = ""+item.gst;
-            item.subtotal =this.getDigits(  item.totalamount +  item.gst );
+            let gstr = 0.1;
+            
+            // alert(this.invoice.gstRatio);
+            if(this.invoice.gstRatio!=0.1)
+            {
+              gstr = this.invoice.gstRatio;
+            }
+                
+            item.gst = this.getDigits(item.totalamount*gstr);
+            
+            item.gsts = this.getDigits(item.gst);
+            item.subtotal =this.getDigits(item.totalamount +  item.gst );
             item.subtotals = ""+item.subtotal;
             let total =0.00;
             let totalm =0.00;
@@ -131,7 +140,7 @@ import API from '../../../api/config';
         {
           url =API.host+"/api/invoices/add";
         }
-        console.log(this.invoice);
+        // console.log(this.invoice);
         this.$http.post(url, this.invoice,{  headers: {  'Content-Type': 'application/json'  }  }
             ).then(function(res){
                         // this.data = {};

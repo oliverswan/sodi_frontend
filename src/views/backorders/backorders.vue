@@ -124,7 +124,8 @@ import $ from "jquery"
           complete(id)
           {
             this.$http.get(API.host+"/api/backorders/complete/"+id).then(function(res){
-                          this.getData ();
+                        
+                          // this.getData ();
                       },function(res){
                      });
           },

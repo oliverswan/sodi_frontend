@@ -109,7 +109,7 @@ import $ from "jquery";
               alert("Customer from NewZealand, Gst is $0.00");
             }
             //  if(contact.getContactName().equals("The Kart Centre")||contact.getContactName().equals("Ultimate Karting Sydney"))
-             if(this.contactName === "The Kart Centre"||this.contactName === "Ultimate Karting Sydney")
+             if(this.contactName === "The Kart Centre")
             {
               alert("Customer has 80% discount or free shipping");
             }

@@ -98,6 +98,16 @@ import VueBootstrapTable from '../components/VueBootstrapTable.vue';
                   editable: true,
               },
               {
+                title: 'discount',
+                visible: true,
+                editable: true,
+              },
+              {
+                title: 'gst',
+                visible: true,
+                editable: true,
+              },
+              {
                 title: 'personName',
                 visible: true,
                 editable: true,

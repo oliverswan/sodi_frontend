@@ -11,6 +11,7 @@
               </i-select>
               <Input v-model="criteriaValue" type="text" style="width:5%" />
               <Button @click="search" style="width:100px;display:inline-block" type="primary">Search</Button>
+              <Button @click="refresh" style="width:100px;display:inline-block" type="primary">Refresh</Button>
        </Col>
        </Row>
 
@@ -230,6 +231,15 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                  let url = API.host+"/api/items/search?criteria="+this.criteria+"&operator="+this.operatorValue+"&criteriaValue="+this.criteriaValue;
                  this.$http.get(url).then(function(res){
                         this.data = res.data;
+                     },function(res){
+                       this.loading = false;
+                          //alert(res.status)
+                    });
+              },
+              refresh(){
+                let url = API.host+"/api/items?echo=1";
+                 this.$http.get(url).then(function(res){
+                        this.data = res.data.data;
                      },function(res){
                        this.loading = false;
                           //alert(res.status)

@@ -45,6 +45,8 @@
         <Button @click="handleSelectAll(true)">Select All</Button>
         <Button @click="handleSelectAll(false)">Cancel All selected</Button>
         <i-button type="primary" style="margin:10px"  @click.prevent="approveAll">Approve Selected</i-button>
+        <i-button type="primary" style="margin:10px"  @click.prevent="create">Create New Order</i-button>
+        <i-button type="primary" style="margin:10px"  @click.prevent="refresh">Refresh</i-button>
       </Row>
   </div>
 </template>
@@ -105,7 +107,7 @@ import $ from "jquery"
               {
                        title: 'Action',
                        key: 'action',
-                       width: 410,
+                       width: 450,
                        align: 'center',
                        render: (h, params) => {
                            return h('div', [
@@ -166,7 +168,7 @@ import $ from "jquery"
                                           this.goBO(params.index);
                                        }
                                    }
-                               }, 'Go BO'),
+                               }, 'Add BO'),
                                h('Button', {
                                    props: {
                                        type: 'primary',
@@ -177,7 +179,18 @@ import $ from "jquery"
                                           this.approvceBackorder(params.index);
                                        }
                                    }
-                               }, 'Clean B/O')
+                               }, 'Clear B/O'),
+                               h('Button', {
+                                   props: {
+                                       type: 'primary',
+                                       size: 'small'
+                                   },
+                                   on: {
+                                       click: () => {
+                                          this.stockBo(params.index);
+                                       }
+                                   }
+                               }, 'Stock B/O')
                            ]);
                        }
                    }
@@ -210,13 +223,13 @@ import $ from "jquery"
           },
           getRowClassName (row, index) {
 
-                     if(row.contactName === "Baykarts limited"||row.contactName === "Formula Challenge Limited"||row.contactName === "Pro Karts"||row.contactName === "Daytona Raceway")
-                     {
-                            return 'green-row';
-                      }  else if(row.contactName === "The Kart Centre"||row.contactName === "Ultimate Karting Sydney")
-                        {
+                    if(row.pocountry !="Australia")
+                    {
+                         return 'green-row';
+                    }else if(row.contactName === "The Kart Center"||row.contactName === "The Kart Centre")
+                    {
                             return 'yellow-row';
-                        }
+                     }
                       return '';
             },
 
@@ -242,6 +255,9 @@ import $ from "jquery"
             handleChange (val, index) {
                 this.$Message.success('修改了第' + (index + 1) + '行数据');
             },
+            refresh(){
+                this.getData();
+            },
             approveAll() {
                 //'text/plain'
               this.$http.post(API.host+"/api/invoices/approveMulti",this.selected, {  headers: {  'Content-Type': 'application/json'  }  }
@@ -256,6 +272,15 @@ import $ from "jquery"
                     });
 
 
+            },
+             create(){
+              let newinvoice ={};
+              newinvoice.items = [];
+              newinvoice.isCreate = true;
+              this.$router.push({
+                  name: 'viewInvoice',
+                  params:newinvoice
+              });
             },
              approveSingle(p) {
                  this.$modal.show('Processing');
@@ -274,6 +299,19 @@ import $ from "jquery"
 
             approvceBackorder(p) {
               this.$http.post(API.host+"/api/invoices/approveBackorder",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
+                  ).then(function(res){
+                              // this.data = {};
+                               alert(res.data);
+                               this.getData();
+                                // console.log(res.data.body.message);
+                    },function(res){
+                                   // this.data = {};
+                                         console.log(res.body.message);
+                    });
+            },
+            
+            stockBo(p) {
+              this.$http.post(API.host+"/api/invoices/stockBackorder",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
                   ).then(function(res){
                               // this.data = {};
                                alert(res.data);
