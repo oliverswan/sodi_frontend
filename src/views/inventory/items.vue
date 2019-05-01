@@ -53,8 +53,14 @@
              <FormItem label="Price：">
                  <Input :disabled="hasSubmit" v-model="current.price" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input emailAddress" />
              </FormItem>
-             <FormItem label="cprice：">
+             <!-- <FormItem label="cprice：">
                  <Input :disabled="hasSubmit" v-model="current.cprice" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input poAddressLine1" />
+             </FormItem> -->
+             <FormItem label="spriceAu：">
+                 <Input :disabled="hasSubmit" v-model="current.spriceAu" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input spriceAu" />
+             </FormItem>
+             <FormItem label="stock：">
+                 <Input :disabled="hasSubmit" v-model="current.stock" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input stock：" />
              </FormItem>
              <FormItem label="GL：">
                  <Input :disabled="hasSubmit" v-model="current.accountCode" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input GL" />

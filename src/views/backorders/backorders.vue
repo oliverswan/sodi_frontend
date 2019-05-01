@@ -45,6 +45,7 @@
              <!-- </FormItem> -->
               <!-- <FormItem label="" style="display: inline-block;" > -->
                  <Button :disabled="hasSubmit" @click="CompleteSome" style="width:100px;display:inline" type="primary">Deduct</Button>
+                 <Button :disabled="hasSubmit" @click="markOrdered" style="width:100px;display:inline" type="primary">Mark ordered</Button>
              <!-- </FormItem> -->
          </Form>
        </Col>
@@ -89,6 +90,10 @@ import $ from "jquery"
                               editable: true,
                           },  {
                               title: 'invoiceNumber',
+                              visible: true,
+                              editable: true,
+                          },  {
+                              title: 'status',
                               visible: true,
                               editable: true,
                           }
@@ -195,6 +200,18 @@ import $ from "jquery"
                                   alert(res.status)
                               });
           },
+           markOrdered(){
+            // let cn = $(".v-autocomplete-input").val();
+            let url = API.host+"/api/backorders/markOrdered"
+            this.$http.get(url).then(function(res){
+                                  if(res.data)
+                                  {
+                                    alert(res.data);
+                                  }
+                              },function(res){
+                                  alert(res.status)
+                              });
+          }
       }// end of methods
     }
 </script>

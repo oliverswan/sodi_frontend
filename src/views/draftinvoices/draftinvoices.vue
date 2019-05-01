@@ -44,7 +44,7 @@
       <Row>
         <Button @click="handleSelectAll(true)">Select All</Button>
         <Button @click="handleSelectAll(false)">Cancel All selected</Button>
-        <i-button type="primary" style="margin:10px"  @click.prevent="approveAll">Approve Selected</i-button>
+        <!-- <i-button type="primary" style="margin:10px"  @click.prevent="approveAll">Approve Selected</i-button> -->
         <i-button type="primary" style="margin:10px"  @click.prevent="create">Create New Order</i-button>
         <i-button type="primary" style="margin:10px"  @click.prevent="refresh">Refresh</i-button>
       </Row>
@@ -85,29 +85,33 @@ import $ from "jquery"
                   title: 'InvoiceNumber',
                   align: 'center',
                   key: 'invoiceNumber',
+                  width: 150,
                   editable: false
               },
               {
                   title: 'reference',
                   align: 'center',
                   key: 'reference',
+                  width: 150,
                   editable: false
               },
               {
                   title: 'Name',
                   align: 'center',
+                   width: 350,
                   key: 'contactName'
               },{
                   title: 'Amount',
                   align: 'center',
                   key: 'subtotals',
+                  width: 150,
                   editable: false
               },
 
               {
                        title: 'Action',
                        key: 'action',
-                       width: 450,
+                       width: 750,
                        align: 'center',
                        render: (h, params) => {
                            return h('div', [
@@ -173,6 +177,8 @@ import $ from "jquery"
                                    props: {
                                        type: 'primary',
                                        size: 'small'
+                                   },style: {
+                                       marginRight: '5px'
                                    },
                                    on: {
                                        click: () => {
@@ -184,6 +190,8 @@ import $ from "jquery"
                                    props: {
                                        type: 'primary',
                                        size: 'small'
+                                   },style: {
+                                       marginRight: '5px'
                                    },
                                    on: {
                                        click: () => {
@@ -191,6 +199,21 @@ import $ from "jquery"
                                        }
                                    }
                                }, 'Stock B/O')
+                            //    ,
+                               ,
+                               h('Button', {
+                                   props: {
+                                       type: 'primary',
+                                       size: 'small'
+                                   },style: {
+                                       marginRight: '5px'
+                                   },
+                                   on: {
+                                       click: () => {
+                                          this.delete(params.index);
+                                       }
+                                   }
+                               }, 'Delete')
                            ]);
                        }
                    }
@@ -312,6 +335,18 @@ import $ from "jquery"
             
             stockBo(p) {
               this.$http.post(API.host+"/api/invoices/stockBackorder",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
+                  ).then(function(res){
+                              // this.data = {};
+                               alert(res.data);
+                               this.getData();
+                                // console.log(res.data.body.message);
+                    },function(res){
+                                   // this.data = {};
+                                         console.log(res.body.message);
+                    });
+            },
+            delete(p) {
+              this.$http.post(API.host+"/api/invoices/delete",this.data[p], {  headers: {  'Content-Type': 'application/json'  }  }
                   ).then(function(res){
                               // this.data = {};
                                alert(res.data);
