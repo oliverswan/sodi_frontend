@@ -2,14 +2,14 @@
   <div>
        <Row>
        <Col span="24">
-         <vue-bootstrap-table
+         <tracking-table
            :columns="columns"
            :values="data"
            :show-filter="true"
            :sortable="true"
            :paginated="true"
            :ajax="aj"
-           :rowClickHandler="rowClicked"
+           
            :filter-case-sensitive="false"
            :default-order-direction="true"
            @cellDataModifiedEvent="onCellDataModifiedEvent"
@@ -18,7 +18,7 @@
            >
 
            <!-- :rowClickHandler="rowClicked" -->
-         </vue-bootstrap-table>
+         </tracking-table>
          <!-- <v-dialog/>
          <modal name="detail">
           {{this.current.invoiceNumber}}
@@ -45,7 +45,7 @@
     private String dispatchDate;
     private List<String> shippingPreAlertUrls;
     private String deliveryDate; -->
-
+                 Case Id : <Input v-model="currentId" type="text" style="width:5%" /><br>
                  <b> Upload proforma:   </b><input type="file" value="file" id="file1" @change="upload_proforma"></Input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  <b> Upload deposit payment:   </b><input type="file" value="" id="file2" @change="upload_deposit"></Input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  <b> Upload balance payment:   </b><input type="file" value="" id="file3" @change="upload_balance"></Input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -83,7 +83,9 @@
 </template>
 <script>
 import API from '../../api/config';
-import VueBootstrapTable from '../components/VueBootstrapTable.vue';
+import Vue from 'vue';
+import TrackingTable from '../components/trackingTable/trackingTable.vue';
+// import VueBootstrapTable from '../components/VueBootstrapTable.vue';
 // import customerSelect from  '../components/CustomerSelect/CustomerSelect.vue'
 import $ from "jquery";
 import axios from 'axios';
@@ -91,7 +93,7 @@ import axios from 'axios';
 // :default-order-column="invoiceNumber"
     export default {
         components: {
-            VueBootstrapTable
+            TrackingTable
             // ,
             // customerSelect
         },
@@ -99,12 +101,13 @@ import axios from 'axios';
             return {
                     columnToSortBy: "id",
                     data:[],
+                    currentId:0,
                     trackings:[],
                     current:{},
                     hasSubmit:false,
                     aj: {
                        enabled: true,
-                       url: API.host+"/api/potracking?echo=5",
+                       url: API.host+"/potracking?echo=5",
                        method: "GET",
                        delegate: false
                      },
@@ -115,7 +118,11 @@ import axios from 'axios';
                               title: 'date',
                               visible: true,
                               editable: true,
-                          },  {
+                          },{
+                              title: 'customerName',
+                              visible: true,
+                              editable: true,
+                          } , {
                               title: 'partsType',
                               visible: true,
                               editable: true,
@@ -124,11 +131,11 @@ import axios from 'axios';
                               visible: true,
                               editable: true,
                           }
-                          ,  {
-                              title: 'proFormaFileUrls',
-                              visible: true,
-                              editable: true,
-                          }
+                          // ,  {
+                          //     title: 'proFormaFileUrls',
+                          //     visible: true,
+                          //     editable: true,
+                          // }
                           ,  {
                               title: 'proFormaNumber',
                               visible: true,
@@ -142,11 +149,13 @@ import axios from 'axios';
                               title: 'depositPaymentStatus',
                               visible: true,
                               editable: true,
-                          },  {
-                              title: 'depositPaymentUrls',
-                              visible: true,
-                              editable: true,
-                          },  {
+                          }, 
+                          //  {
+                          //     title: 'depositPaymentUrls',
+                          //     visible: true,
+                          //     editable: true,
+                          // }, 
+                           {
                               title: 'productionDate',
                               visible: true,
                               editable: true,
@@ -162,18 +171,27 @@ import axios from 'axios';
                               title: 'balancePaymentStatus',
                               visible: true,
                               editable: true,
-                          },  {
-                              title: 'balancePaymentUrls',
-                              visible: true,
-                              editable: true,
-                          }, {
-                              title: 'shippingPreAlertUrls',
-                              visible: true,
-                              editable: true,
-                          },  {
+                          },  
+                          // {
+                          //     title: 'balancePaymentUrls',
+                          //     visible: true,
+                          //     editable: true,
+                          // }, 
+                          // {
+                          //     title: 'shippingPreAlertUrls',
+                          //     visible: true,
+                          //     editable: true,
+                          // }, 
+                           {
                               title: 'deliveryDate',
                               visible: true,
                               editable: true,
+                          },
+                           {
+                              title: "Action",
+                              name:"code",
+                              visible: true,
+                              renderfunction: this.renderTableAction
                           }
                         ],
                     // dialog:{
@@ -204,6 +222,24 @@ import axios from 'axios';
                      },function(res){
                     });
           },
+          downloadFilesClick(){
+
+          },
+          renderTableAction(colname, entry){
+                     // glyphicon-ok glyphicon-remove
+                   return  Vue.compile(
+                     
+                     '<div class="btn-group" role="group"  ref="actiondiv" ><button type="button" class="btn btn-sm btn-primary"><span class="glyphicon " @click="downloadFilesClick" aria-hidden="true">View Files</span></button></div>'
+                        // +
+                        // '  <button type="button" class="btn btn-sm btn-danger"><span class="glyphicon " aria-hidden="true">'+entry.coming+'</span></button>'+
+                        // '</div>'
+                        );
+
+                    //  return '<div class="btn-group" role="group"  ref="actiondiv" >'+
+                    //     '  <button type="button" class="btn btn-sm btn-primary"><span class="glyphicon " @click.stop="receiveClick" aria-hidden="true">Receive</span></button>'+
+                    //     '  <button type="button" class="btn btn-sm btn-danger"><span class="glyphicon " aria-hidden="true">'+entry.coming+'</span></button>'+
+                    //     '</div>';
+              },
           // complete(id)
           // {
           //   this.$http.get(API.host+"/api/backorders/complete/"+id).then(function(res){
@@ -214,7 +250,8 @@ import axios from 'axios';
           // },
           rowClicked($event, entry){
               this.current = entry;
-              console.log(this.current);
+              alert("You choose : " + this.current.id +" "+this.current.customerName);
+              // console.log(this.current);
 //               let that = this;
 //               let content = "";
 
@@ -270,7 +307,7 @@ import axios from 'axios';
            
               let formData = new FormData();
               formData.append('file', e.target.files[0]);
-              let url = API.host+'/potracking/upload/proforma/'+1;//this.current.id
+              let url = API.host+'/potracking/upload/proforma/'+this.currentId;//
               alert(url);
               let config = {
                 headers:{'Content-Type':'multipart/form-data'},
@@ -301,7 +338,7 @@ import axios from 'axios';
           },upload_deposit(e){
               let formData = new FormData();
               formData.append('file', e.target.files[0]);
-              let url = API.host+'/potracking/upload/depposit/'+this.current.id;
+              let url = API.host+'/potracking/upload/depposit/'+this.currentId;
               let config = {
                 headers:{'Content-Type':'multipart/form-data'},
                 responseType: 'blob'
@@ -331,7 +368,7 @@ import axios from 'axios';
           },upload_balance(e){
               let formData = new FormData();
               formData.append('file', e.target.files[0]);
-              let url = API.host+'/potracking/upload/balance/'+this.current.id;
+              let url = API.host+'/potracking/upload/balance/'+this.currentId;
               let config = {
                 headers:{'Content-Type':'multipart/form-data'},
                 responseType: 'blob'
@@ -361,7 +398,7 @@ import axios from 'axios';
           },upload_shipingalert(e){
               let formData = new FormData();
               formData.append('file', e.target.files[0]);
-              let url = API.host+'/potracking/upload/shippingalert/'+this.current.id;
+              let url = API.host+'/potracking/upload/shippingalert/'+this.currentId;
               let config = {
                 headers:{'Content-Type':'multipart/form-data'},
                 responseType: 'blob'

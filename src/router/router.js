@@ -65,7 +65,8 @@ export const otherRouter = {
         { path: 'viewInvoice',title: 'ViewInvoice',name: 'viewInvoice', component: () => import('@/views/viewinvoice/viewInvoice.vue') },
         { path: 'viewSodiOrder',title: 'viewSodiOrder',name: 'viewSodiOrder', component: () => import('@/views/orders/vieworders.vue') },
         { path: 'viewbackorder',title: 'BackOrder Details',name: 'viewbackorder', component: () => import('@/views/viewbackorder/viewbackorder.vue') },
-        { path: 'editTracking',title: 'Tracking Details',name: 'editTracking', component: () => import('@/views/purchase/potDetail.vue') }
+        { path: 'editTracking',title: 'Tracking Details',name: 'editTracking', component: () => import('@/views/purchase/potDetail.vue') },
+        { path: 'downloadTrackingFiles',title: 'View Files',name: 'downloadTrackingFiles', component: () => import('@/views/purchase/downloadTrackingFiles.vue') }
         ]
 };
 
