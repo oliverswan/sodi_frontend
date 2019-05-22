@@ -64,7 +64,8 @@ export const otherRouter = {
         { path: 'ruleeditor',title: 'RuleEditor',name: 'ruleeditor', component: () => import('@/views/editrule/editrule.vue') },
         { path: 'viewInvoice',title: 'ViewInvoice',name: 'viewInvoice', component: () => import('@/views/viewinvoice/viewInvoice.vue') },
         { path: 'viewSodiOrder',title: 'viewSodiOrder',name: 'viewSodiOrder', component: () => import('@/views/orders/vieworders.vue') },
-        { path: 'viewbackorder',title: 'BackOrder Details',name: 'viewbackorder', component: () => import('@/views/viewbackorder/viewbackorder.vue') }
+        { path: 'viewbackorder',title: 'BackOrder Details',name: 'viewbackorder', component: () => import('@/views/viewbackorder/viewbackorder.vue') },
+        { path: 'editTracking',title: 'Tracking Details',name: 'editTracking', component: () => import('@/views/purchase/potDetail.vue') }
         ]
 };
 
@@ -199,6 +200,18 @@ export const appRouter = [
             children: [
                 // 注意name的属性值一定要加_index的规则
                 { path: 'index', title: 'Order', name: 'order_index', component: () => import('@/views/orders/orders.vue') }
+            ]
+        },
+        {
+            path: '/purchasetracking',
+            icon: 'ionic',
+            title: 'Order',
+            name: 'PurchaseTracking',
+            // 仍然使用Main组件，将内容展现到Main的子routerview里面去
+            component: Main,
+            children: [
+                // 注意name的属性值一定要加_index的规则
+                { path: 'index', title: 'PurchaseTracking', name: 'purchasetracking_index', component: () => import('@/views/purchase/PurchaseTracking.vue') }
             ]
         }
 

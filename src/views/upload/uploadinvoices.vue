@@ -19,6 +19,7 @@
     <uploader-list></uploader-list>
   </uploader> -->
   <input type="file" value="" id="file" @change="uploadConfig">
+  <input type="file" value="" id="file" @change="uploadtest">
   </div>
 </template>
 
@@ -52,6 +53,7 @@ import axios from 'axios';
           headers:{'Content-Type':'multipart/form-data'},
           responseType: 'blob'
         };
+        
        axios.post(url,formData, config).then(function (response) {
           console.log(response.data)
 
@@ -73,17 +75,38 @@ import axios from 'axios';
                             navigator.msSaveBlob(blob, fileName);
                         }
         });
+      },
+       uploadtest(e) {
+        let formData = new FormData();
+        formData.append('file', e.target.files[0]);
+        let url = API.host+'/upload/purchase/profoma';
+        let config = {
+          headers:{'Content-Type':'multipart/form-data'},
+          responseType: 'blob'
+        };
+        
+       axios.post(url,formData, config).then(function (response) {
+          console.log(response.data)
 
-//         axios({
-//     method: 'post',
-//     url: url,
-//     formData,
-//     responseType: 'blob'
-// }).then(response => {
-//     // this.download(response)
-// }).catch((error) => {});
-
-      }
+          // const content = response.data;
+          //               const blob = new Blob([content]);
+          //               const fileName = `price.csv`;
+          //               if ("download" in document.createElement("a")) {
+          //                   // 非IE下载
+          //                   const elink = document.createElement("a");
+          //                   elink.download = fileName;
+          //                   elink.style.display = "none";
+          //                   elink.href = URL.createObjectURL(blob);
+          //                   document.body.appendChild(elink);
+          //                   elink.click();
+          //                   URL.revokeObjectURL(elink.href); // 释放URL 对象
+          //                   document.body.removeChild(elink);
+          //               } else {
+          //                   // IE10+下载
+          //                   navigator.msSaveBlob(blob, fileName);
+          //               }
+        });
+      },
      }
   }
 </script>

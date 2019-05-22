@@ -6,12 +6,16 @@
           <i-button type="primary" style="margin:10px"  @click.prevent="report">Generate</i-button>
          </Row>
          <Row>
-           <B>Back Order Report (base on itemCode): </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <B>Not Completed Back Order Report (base on itemCode): </B>&nbsp;&nbsp;&nbsp;&nbsp;
            <i-button type="primary" style="margin:10px"  @click.prevent="report_backorder">Generate</i-button>
+           <B>Completed Back Order Report (base on itemCode): </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <i-button type="primary" style="margin:10px"  @click.prevent="report_backorder_c">Generate</i-button>
          </Row>
          <Row>
-           <B>Back Order Report (base on customer): </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <B>Not Completed Back Order Report (base on customer): </B>&nbsp;&nbsp;&nbsp;&nbsp;
            <i-button type="primary" style="margin:10px"  @click.prevent="report_delivery">Generate</i-button>
+           <B>Completed Order Report (base on customer): </B>&nbsp;&nbsp;&nbsp;&nbsp;
+           <i-button type="primary" style="margin:10px"  @click.prevent="report_delivery_c">Generate</i-button>
           </Row>
            <Row>
            <B>Monthly sales Report: </B>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -58,10 +62,16 @@ import API from '../../api/config';
               window.open(url);
             }
             ,report_backorder() {
-              let url = API.host+"/api/reports/backorder";
+              let url = API.host+"/api/reports/backorder/0";
               window.open(url);
-            }  ,report_delivery() {
-                let url = API.host+"/api/reports/backorderDelivery";
+            } ,report_backorder_c() {
+              let url = API.host+"/api/reports/backorder/1";
+              window.open(url);
+            } ,report_delivery() {
+                let url = API.host+"/api/reports/backorderDelivery/0";
+                window.open(url);
+            },report_delivery_c() {
+                let url = API.host+"/api/reports/backorderDelivery/1";
                 window.open(url);
             },report_monthlysales(){
                let url = API.host+"/api/reports/salehistory/" + this.monthlySales;
