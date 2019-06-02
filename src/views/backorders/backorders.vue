@@ -46,6 +46,7 @@
               <!-- <FormItem label="" style="display: inline-block;" > -->
                  <Button :disabled="hasSubmit" @click="CompleteSome" style="width:100px;display:inline" type="primary">Deduct</Button>
                  <Button :disabled="hasSubmit" @click="markOrdered" style="width:100px;display:inline" type="primary">Mark ordered</Button>
+                 <Button :disabled="hasSubmit" @click="sendList" style="width:100px;display:inline" type="primary">Send B/O List</Button>
              <!-- </FormItem> -->
          </Form>
        </Col>
@@ -203,6 +204,17 @@ import $ from "jquery"
            markOrdered(){
             // let cn = $(".v-autocomplete-input").val();
             let url = API.host+"/api/backorders/markOrdered"
+            this.$http.get(url).then(function(res){
+                                  if(res.data)
+                                  {
+                                    alert(res.data);
+                                  }
+                              },function(res){
+                                  alert(res.status)
+                              });
+          },sendList(){
+            // let cn = $(".v-autocomplete-input").val();
+            let url = API.host+"/api/reports/sendlist"
             this.$http.get(url).then(function(res){
                                   if(res.data)
                                   {

@@ -6,6 +6,7 @@
                 <p><font size="6" color="red">Proforma Files:</font> </p>
                 <div v-for="(url,index) in model.proFormaFileUrls" @click="toDetail(url)">
                     <p>{{url}}</p>
+                    <!-- <Button  @click="download(url)" style="width:100px;display:inline" type="primary">download</Button> -->
                     <!-- <a :href="getUrl(item.tel)">图标{{item.tel}}</a> -->
                  </div>
               </Col>
@@ -16,7 +17,7 @@
                  <div v-for="(url,index) in model.depositPaymentUrls" @click="toDetail(url)">
                     <p>{{url}}</p>
                     </div>
-                            </Col>
+                  </Col>
     </Row>
     <Row>
       <Col>
@@ -42,6 +43,7 @@
 <script>
 // import customerSelect from  '../components/CustomerSelect/CustomerSelect.vue'
 import $ from "jquery";
+import API from '../../api/config';
 
   export default {
         data () {
@@ -73,7 +75,32 @@ import $ from "jquery";
         },
         methods: {
           toDetail (url) {
-              console.log(url);
+              // console.log(url);
+              // alert( API.host+"/potracking/download?url="+url);
+               let realurl =  API.host+"/potracking/download?url="+url;
+               
+               this.$http.get(realurl).then(function(res){
+
+                        const content = res.data;
+                        const blob = new Blob([content]);
+                        const fileName = `HIE_quote.pdf`;
+                        if ("download" in document.createElement("a")) {
+                            // 非IE下载
+                            const elink = document.createElement("a");
+                            elink.download = fileName;
+                            elink.style.display = "none";
+                            elink.href = URL.createObjectURL(blob);
+                            document.body.appendChild(elink);
+                            elink.click();
+                            URL.revokeObjectURL(elink.href); // 释放URL 对象
+                            document.body.removeChild(elink);
+                        } else {
+                            // IE10+下载
+                            navigator.msSaveBlob(blob, fileName);
+                        }
+                              },function(res){
+                                  alert(res.status)
+                              });
           }
       }// end of methods
     }
