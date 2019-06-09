@@ -33,9 +33,10 @@
                 </i-col>
     </Row>
         <Row :gutter="10">
-            <Col :md="24" :lg="8">
+
+            <Col :md="24" :lg="8"> 
                 <Row class-name="home-page-row1" :gutter="10">
-                    <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
+                    <!-- <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
                         <Card>
                             <Row type="flex" class="user-infor">
                                 <Col span="8">
@@ -63,10 +64,10 @@
                             </Row>
                         </Card>
                        
-                    </Col>
+                    </Col> -->
                   
                     <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
-                        <!-- <Card>
+                       <Card>
                             <p slot="title" class="card-title">
                                 <Icon type="android-checkbox-outline"></Icon>
                                 ToDo List
@@ -89,14 +90,13 @@
                             </Modal>
                             <div class="to-do-list-con">
                                 <div v-for="(item, index) in toDoList" :key="'todo-item' + (toDoList.length - index)" class="to-do-item">
-                                    <to-do-list-item :content="item.title"></to-do-list-item>
+                                    <to-do-list-item :todo="item"  @finish="check" ></to-do-list-item>
                                 </div>
                             </div>
-                        </Card> -->
+                        </Card> 
                         <sales-chart></sales-chart>
                     </Col>
                 </Row>
-               
             </Col>
         </Row>
     </div>
@@ -137,12 +137,12 @@ export default {
     data () {
         return {
             toDoList: [
-                {
-                    title: 'do something1'
-                },
-                {
-                    title: 'do something2'
-                }
+                // {
+                //     title: 'do something1'
+                // },
+                // {
+                //     title: 'do something2'
+                // }
             ],
             count: {
                 createUser: 496,
@@ -162,7 +162,8 @@ export default {
             // infor:   { title: 'Inventory Value', icon: 'md-person-add', count: 10.333, color: '#2d8cf0' },
             cityData: cityData,
             showAddNewTodo: false,
-            newToDoItemValue: ''
+            newToDoItemValue: '',
+            currentTodo:{}
         };
     },
     computed: {
@@ -179,6 +180,14 @@ export default {
                   }
               },function(res){
              });
+
+              this.$http.get(API.host+"/api/todo").then(function(res){
+                  if(res.data){
+                      console.log(res.data);
+                      this.toDoList = res.data;
+                  }
+              },function(res){
+             });
         },
     methods: {
         addNewToDoItem () {
@@ -186,20 +195,47 @@ export default {
         },
         addNew () {
             if (this.newToDoItemValue.length !== 0) {
-                this.toDoList.unshift({
-                    title: this.newToDoItemValue
-                });
+                this.currentTodo = {
+                    "title": this.newToDoItemValue
+                };
+
+                // 本地添加
+                this.toDoList.unshift(this.currentTodo);
+
+                // 数据库添加
+                 this.$http.post(API.host+"/api/todo/save",this.currentTodo, {  headers: {  'Content-Type': 'application/json'  }  }
+                    ).then(function(res){
+                                // this.data = {};
+                                 alert("success！");
+                                  // console.log(res.data.body.message);
+                      },function(res){
+                                     // this.data = {};
+                                           console.log(res.body.message);
+                      }); 
+
                 setTimeout(() => {
                     this.newToDoItemValue = '';
                 }, 200);
                 this.showAddNewTodo = false;
             } else {
-                this.$Message.error('请输入待办事项内容');
+                this.$Message.error('Please input what to do...');
             }
         },
         cancelAdd () {
             this.showAddNewTodo = false;
             this.newToDoItemValue = '';
+        },check(para){
+                
+                 this.$http.post(API.host+"/api/todo/save",para, {  headers: {  'Content-Type': 'application/json'  }  }
+                    ).then(function(res){
+                                // this.data = {};
+                                 alert("success！");
+                                  // console.log(res.data.body.message);
+                      },function(res){
+                                     // this.data = {};
+                                           console.log(res.body.message);
+                      }); 
+
         }
     }
 };

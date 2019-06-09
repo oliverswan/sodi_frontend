@@ -78,12 +78,13 @@ import API from '../../api/config';
               // console.log(url);
               // alert( API.host+"/potracking/download?url="+url);
                let realurl =  API.host+"/potracking/download?url="+url;
-               
-               this.$http.get(realurl).then(function(res){
+               alert("Download will start,please click ok to continue...");
+               this.$http.get(realurl,{'responseType':'blob'}).then(function(res){
 
                         const content = res.data;
                         const blob = new Blob([content]);
-                        const fileName = `HIE_quote.pdf`;
+                        let index = url.lastIndexOf("/");
+                        const fileName =  url.substring(index+1,url.length);
                         if ("download" in document.createElement("a")) {
                             // 非IE下载
                             const elink = document.createElement("a");

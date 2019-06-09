@@ -6,11 +6,18 @@
          <!-- <Table  :columns="columns"  :data="invoice.items" border></Table> :items="invoice.items" -->
        </Col>
        </Row>
+ <Row style="margin-top:10px">
+       <Col span="24">
+        <i-button type="primary" style="margin:10px"  @click.prevent="addCart">Add to itaka cart</i-button>
+       </Col>
+       </Row>
+
+       
   </div>
 </template>
 <script>
 import OrdersTable from '../components/ordersTable/ordersTable.vue';
-
+import API from '../../api/config';
 import $ from "jquery";
 
   export default {
@@ -90,6 +97,16 @@ import $ from "jquery";
         methods: {
           getData () {
           },
+          addCart(){
+            let url = API.host+"/api/orders/addcart?id=" + this.order.id;
+                this.$http.get(url).then(function(res){
+                        if(res.data){
+                            alert(res.data);
+                        }
+                    },function(res){
+                        alert(res.data)
+                  });
+          }
          
       }// end of methods
     }
