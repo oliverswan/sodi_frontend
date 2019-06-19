@@ -71,6 +71,22 @@
          </Form>
        </Col>
        </Row>
+        <Row>
+       <Col span="24">
+         <Form ref="seq" :label-width="100">
+             <FormItem label="Invoice Number:" >
+                 <Input v-model="invoiceNbr" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input..." />
+             </FormItem>
+             <FormItem label="Reference Number:">
+                 <Input v-model="referenceNbr" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Plase input..." />
+             </FormItem>
+           
+             <FormItem label="">
+                 <Button @click="updateSeq" style="width:100px;" type="primary">Update Seq</Button>
+             </FormItem>
+         </Form>
+       </Col>
+       </Row>
   </div>
 </template>
 <script>
@@ -89,6 +105,8 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
               hasSubmit:false,
               monthAve:5,
               criteria:"",
+              invoiceNbr:"",
+              referenceNbr:"",
               criteriaList: [
                     {
                         value: 'msoh',
@@ -183,7 +201,7 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
                 visible: true,
                 editable: true,
               },{
-                title: 'location',
+                title: 'itakaId',
                 visible: true,
                 editable: true,
               }, {
@@ -267,6 +285,16 @@ import ItemsTable from '../components/ItemsTable/ItemsTable.vue';
               },
               onAjaxLoadingError( data ) {
                   console.log("ajaxLoadedEvent - data : " + data );
+              },
+             
+              updateSeq(){
+                let url = API.host+"/api/items/updateSeq?invoiceSeq="+this.invoiceNbr+"&refernceSeq="+this.referenceNbr;
+                 this.$http.get(url).then(function(res){
+                        alert("success！");
+                     },function(res){
+                       this.loading = false;
+                          //alert(res.status)
+                    });
               },
               handleSubmit(){
                 this.$http.post(API.host+"/api/items/add",this.current, {  headers: {  'Content-Type': 'application/json'  }  }

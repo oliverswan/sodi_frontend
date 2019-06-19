@@ -28,7 +28,8 @@
        </Row>
        <Row>
          <b>Numer Of Month:  </b><Input v-model="numerOfMonth" style="width: 10%"></Input>
-         <i-button type="primary" style="margin:10px"  @click.prevent="create">Generate Order</i-button>
+         <i-button type="primary" style="margin:10px"  @click.prevent="create">Generate Order On Sales</i-button>
+         <i-button type="primary" style="margin:10px"  @click.prevent="create">Generate Order On Backorder</i-button>
          <i-button type="primary" style="margin:10px"  @click.prevent="updateItakaId">Update ItakaShop Id</i-button>
        </Row>
   </div>
@@ -244,7 +245,7 @@ import $ from "jquery";
                 //         alert(res.data)
                 //   });
 
-                 let url = API.host+"/api/items/updateitakaid";
+                let url = API.host+"/api/items/updateitakaid";
                 this.$http.get(url).then(function(res){
                         if(res.data){
                             this.getData();
@@ -255,6 +256,15 @@ import $ from "jquery";
 
             },create() {
                 let url = API.host+"/api/orders/create?month=" + this.numerOfMonth;
+                this.$http.get(url).then(function(res){
+                        if(res.data){
+                            this.getData();
+                        }
+                    },function(res){
+                        alert(res.data)
+                  });
+            },create() {
+                let url = API.host+"/api/orders/createbackorder";
                 this.$http.get(url).then(function(res){
                         if(res.data){
                             this.getData();

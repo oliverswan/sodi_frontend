@@ -151,9 +151,9 @@ export default {
                 transfer: 39503498
             },
              inforCardData: [
-        { title: 'Inventory Value', icon: 'social-usd', count: 0, color: '#2d8cf0' },
-        { title: 'Some Value', icon: 'md-locate', count:  0, color: '#19be6b' },
-        { title: 'Some Value', icon: 'md-help-circle', count:  0, color: '#ff9900' }
+        { title: 'Total Value', icon: 'social-usd', count: 0, color: '#2d8cf0' },
+        { title: 'Meakone Value', icon: 'md-locate', count:  0, color: '#19be6b' },
+        { title: 'Maxpower Value', icon: 'md-help-circle', count:  0, color: '#ff9900' }
         // ,
         // { title: '分享统计', icon: 'md-share', count: 657, color: '#ed3f14' },
         // { title: '新增互动', icon: 'md-chatbubbles', count: 12, color: '#E46CBB' },
@@ -177,6 +177,8 @@ export default {
                   if(res.data){
                       console.log(res.data);
                       this.inforCardData[0].count = res.data.totalvalues;
+                      this.inforCardData[1].count = res.data.meakonevalues;
+                      this.inforCardData[2].count = res.data.maxpowervalues;
                   }
               },function(res){
              });
@@ -193,6 +195,36 @@ export default {
         addNewToDoItem () {
             this.showAddNewTodo = true;
         },
+        
+/** 
+* 将数值格式化成金额形式 
+* 
+* @param num 数值(Number或者String) 
+* @param precision 精度，默认不变
+* @param separator 分隔符，默认为逗号
+* @return 金额格式的字符串,如'1,234,567'，默认返回NaN
+* @type String 
+*/
+ formatNumber(num, precision, separator) {
+    var parts;
+    // 判断是否为数字
+    if (!isNaN(parseFloat(num)) && isFinite(num)) {
+        // 把类似 .5, 5. 之类的数据转化成0.5, 5, 为数据精度处理做准, 至于为什么
+        // 不在判断中直接写 if (!isNaN(num = parseFloat(num)) && isFinite(num))
+        // 是因为parseFloat有一个奇怪的精度问题, 比如 parseFloat(12312312.1234567119)
+        // 的值变成了 12312312.123456713
+        num = Number(num);
+        // 处理小数点位数
+        num = (typeof precision !== 'undefined' ? (Math.round(num * Math.pow(10,precision)) / Math.pow(10,precision)).toFixed(precision) : num).toString();
+        // 分离数字的小数部分和整数部分
+        parts = num.split('.');
+        // 整数部分加[separator]分隔, 借用一个著名的正则表达式
+        parts[0] = parts[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + (separator || ','));
+ 
+        return parts.join('.');
+    }
+    return NaN;
+},
         addNew () {
             if (this.newToDoItemValue.length !== 0) {
                 this.currentTodo = {
