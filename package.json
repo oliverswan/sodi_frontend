@@ -37,7 +37,7 @@
     "simplemde": "^1.11.2",
     "sortablejs": "^1.7.0",
     "stylus-loader": "^3.0.2",
-    "tinymce": "^4.7.4",
+    "tinymce": "^4.9.11",
     "v-autocomplete": "^1.8.2",
     "vue": "^2.5.13",
     "vue-awesome": "^3.1.0",
