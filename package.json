@@ -19,7 +19,7 @@
   "dependencies": {
     "@xunlei/vue-popup": "^1.0.0",
     "area-data": "^1.0.0",
-    "axios": "^0.17.1",
+    "axios": "^0.21.1",
     "bootstrap": "^3.3.7",
     "chalk": "^2.4.1",
     "chart.js": "^2.7.2",
